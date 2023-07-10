@@ -1,86 +1,98 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using VacationSplit.Models;
 
 namespace VacationSplit.Controllers
 {
     public class AccountController : Controller
     {
-         static List<User> _users = new List<User>();
-        // GET: AcountController
+        private static List<User> _users = new List<User>();
+
         public ActionResult Index()
         {
             return View(_users);
         }
 
-        // GET: AcountController/Details/5
-        public ActionResult Details(Models.User user)
+        public ActionResult Details(int id)
         {
-            _users.Add(user);
-            return View("Details", user);
+            var user = _users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
         }
 
-        // GET: AcountController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        //// POST: AcountController/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create(IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(User user)
+        {
+            _users.Add(user);
+            return RedirectToAction(nameof(Index));
+        }
 
-        // GET: AcountController/Edit/5
+
         public ActionResult Edit(int id)
         {
-            return View();
+            var user = _users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
         }
 
-        // POST: AcountController/Edit/5
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(User user)
         {
-            try
+            var existingUser = _users.FirstOrDefault(u => u.Id == user.Id);
+            if (existingUser == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
-            {
-                return View();
-            }
+
+            existingUser.FirstName = user.FirstName;
+            existingUser.LastName = user.LastName;
+            existingUser.Email = user.Email;
+            existingUser.Password = user.Password;
+            existingUser.Picture = user.Picture;
+
+            return RedirectToAction("Details", new { id = existingUser.Id });
         }
 
-        // GET: AcountController/Delete/5
+
         public ActionResult Delete(int id)
         {
-            return View();
+            var user = _users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
         }
 
-        // POST: AcountController/Delete/5
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteConfirmed(int id)
         {
-            try
+            var user = _users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
-            {
-                return View();
-            }
+
+            _users.Remove(user);
+            return RedirectToAction("Index");
         }
     }
 }

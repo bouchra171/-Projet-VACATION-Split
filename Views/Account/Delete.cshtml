@@ -1,0 +1,37 @@
+﻿@model VacationSplit.Models.User
+
+<h4>Delete User</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div>
+            <h4>Are you sure you want to delete this user?</h4>
+            <dl class="row">
+                <dt class="col-sm-2">First Name:</dt>
+                <dd class="col-sm-10">@Html.DisplayFor(model => model.FirstName)</dd>
+
+                <dt class="col-sm-2">Last Name:</dt>
+                <dd class="col-sm-10">@Html.DisplayFor(model => model.LastName)</dd>
+
+                <dt class="col-sm-2">Email:</dt>
+                <dd class="col-sm-10">@Html.DisplayFor(model => model.Email)</dd>
+
+                <dt class="col-sm-2">Password:</dt>
+                <dd class="col-sm-10">@Html.DisplayFor(model => model.Password)</dd>
+
+                <dt class="col-sm-2">Picture:</dt>
+                <dd class="col-sm-10">@Html.DisplayFor(model => model.Picture)</dd>
+            </dl>
+
+            <form asp-action="DeleteConfirmed" method="post">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                    <a asp-action="Index">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
