@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VacationSplit.Models;
+using VacationSplit.Services;
 
 namespace VacationSplit.Controllers
 {
@@ -12,7 +13,9 @@ namespace VacationSplit.Controllers
 
         public IActionResult ProcessLogin(User user)
         {
-            if (user.Email == "BillGates" && user.Password == "bigbucks") 
+            SecurityService securityService = new SecurityService();
+
+            if (securityService.IsValid(user)) 
             {
                 return View("LoginSuccess", user);
             } else 
@@ -21,5 +24,6 @@ namespace VacationSplit.Controllers
             }
             
         }
+
     }
 }
