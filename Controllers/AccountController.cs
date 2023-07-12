@@ -63,7 +63,7 @@ namespace VacationSplit.Controllers
             existingUser.LastName = user.LastName;
             existingUser.Email = user.Email;
             existingUser.Password = user.Password;
-            existingUser.Picture = user.Picture;
+            //existingUser.Picture = user.Picture;
 
             return RedirectToAction("Details", new { id = existingUser.Id });
         }
