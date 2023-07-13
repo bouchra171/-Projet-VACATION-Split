@@ -47,6 +47,9 @@ namespace VacationSplit.Controllers
         {
             try
             {
+                string fileName = Path.GetFileName(user.ProfileImage);
+                user.ProfileImage = "../UsersPictures/"+fileName;
+                //string strFileName =
                 SecurityService securityService = new SecurityService();
                 string password = user.Password.Trim();
                 user.Password = securityService.Encrypt(password);
