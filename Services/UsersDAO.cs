@@ -4,48 +4,44 @@ using System.Drawing;
 using System;
 using VacationSplit.Models;
 using Microsoft.Data.SqlClient;
+using VacationSplit.Repositories;
+using System.Linq;
 
 namespace VacationSplit.Services
 {
     public class UsersDAO
-    {
-        string connectionString = @"Data Source = (localdb)\MSSQLLocalDB;Initial Catalog = Utilisateurs; Integrated Security = True; Connect Timeout = 30; 
-                                    Encrypt=False;Trust Server Certificate=False;Application Intent = ReadWrite; Multi Subnet Failover=False";
-
-                                   
-
+    {        
         public bool FindUserByEmailAndPassword(User user)
         {
-            // return true if found in db
 
             bool success = false;
 
-            string sqlStatement = "SELECT * FROM dbo.Users WHERE email = @email AND password = @password  ";
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+
+            try
             {
-                SqlCommand command = new SqlCommand(sqlStatement, connection);
+                SecurityService securityService = new SecurityService();
 
-                command.Parameters.Add("@email", System.Data.SqlDbType.VarChar, 40).Value = user.Email;
-                command.Parameters.Add("@password", System.Data.SqlDbType.VarChar, 40).Value = user.Password;
-
-                try
+                string encryptedPassword = securityService.Encrypt(user.Password);
+                using (var context = new VacationSplitContext())
                 {
-                    connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    if (reader.HasRows) 
+                    IQueryable<User> query = context.Users.Where(p => p.Password == encryptedPassword);
+                    //query = query.Where(p=>p.Password == encryptedPassword);
+                    User userA = query.First();
+                    if (userA != null)
                     {
                         success = true;
                     }
-
-                }catch(Exception e)
-                {
-                    Console.WriteLine(e.Message);
                 }
 
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
             return success;
+
             // return true if found in DB.
         }
     }

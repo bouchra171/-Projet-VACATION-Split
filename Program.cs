@@ -1,3 +1,28 @@
+using VacationSplit.Models;
+using VacationSplit.Repositories;
+
+//using (var context = new VacationSplitContext())
+//{
+//    context.Database.EnsureDeleted();
+
+//    context.Database.EnsureCreated();
+
+//    var user = new User
+//    {
+
+//        FirstName = "Mohamed",
+//        LastName = "Bournane",
+//        ProfileImage = "C:\\Users\\PC01\\Pictures\\modelisation.PNG",
+//        Email = "mbournane@gmail.com",
+//        Password = ""
+
+//    };
+
+//    context.Add(user);
+//    context.SaveChanges();
+
+//}
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
