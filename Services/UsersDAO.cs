@@ -6,6 +6,7 @@ using VacationSplit.Models;
 using Microsoft.Data.SqlClient;
 using VacationSplit.Repositories;
 using System.Linq;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace VacationSplit.Services
 {
@@ -20,19 +21,13 @@ namespace VacationSplit.Services
 
             try
             {
-                SecurityService securityService = new SecurityService();
-
+                SecurityService securityService = new SecurityService();               
                 string encryptedPassword = securityService.Encrypt(user.Password);
                 using (var context = new VacationSplitContext())
                 {
-                    IQueryable<User> query = context.Users.Where(p => p.Password == encryptedPassword);
-                    //query = query.Where(p=>p.Password == encryptedPassword);
-                    User userA = query.First();
-                    if (userA != null)
-                    {
-                        success = true;
-                    }
-                }
+                     success = context.Users.Any(p => p.Password == encryptedPassword && p.Email == user.Email );                    
+                }               
+                
 
             }
             catch (Exception e)

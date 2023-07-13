@@ -17,11 +17,15 @@ namespace VacationSplit.Models
         [Required]
         [DisplayName("Prénom")]
         [StringLength(20, MinimumLength = 4)]
+        [DataType(DataType.Text)]
         public string FirstName { get; set; }
         [Required]
         [DisplayName("Nom")]
         [StringLength(20, MinimumLength = 4)]
+        [DataType(DataType.Text)]
         public string LastName { get; set; }
+        [DisplayName("Phot de profil")]
+        [DataType(DataType.ImageUrl)]
         public string ProfileImage { get; set; }
     }
 }
