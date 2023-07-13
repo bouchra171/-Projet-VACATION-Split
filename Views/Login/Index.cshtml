@@ -1,35 +1,29 @@
 ﻿@model VacationSplit.Models.User
-
-<h4>Please login</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="ProcessLogin">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-           
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" required type="email" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" type="password" required/>
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-          
-       
-            <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h4 class="mb-3 text-center" style="font-family: 'Varela Round', sans-serif; color: #0D6EFD;">Login</h4>
+            <form asp-action="ProcessLogin">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group text-center">
+                    <label asp-for="Email" class="control-label">Email</label>
+                    <input asp-for="Email" class="form-control form-control-lg" required type="email" style="text-align: center;" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group text-center">
+                    <label asp-for="Password" class="control-label">Password</label>
+                    <input asp-for="Password" class="form-control form-control-lg" type="password" required style="text-align: center;" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
