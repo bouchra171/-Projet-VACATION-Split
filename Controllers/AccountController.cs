@@ -15,12 +15,12 @@ namespace VacationSplit.Controllers
         public ActionResult Index()
         {
             using (var context = new VacationSplitContext())
-            {           
+            {
                 _users = context.Users.ToList();
 
                 return View(_users);
             }
-            
+
         }
 
         // GET: AcountController/Details/5
@@ -48,7 +48,7 @@ namespace VacationSplit.Controllers
             try
             {
                 string fileName = Path.GetFileName(user.ProfileImage);
-                user.ProfileImage = "../UsersPictures/"+fileName;
+                user.ProfileImage = "../UsersPictures/" + fileName;
                 //string strFileName =
                 SecurityService securityService = new SecurityService();
                 string password = user.Password.Trim();
@@ -72,10 +72,10 @@ namespace VacationSplit.Controllers
         {
             using (var context = new VacationSplitContext())
             {
-                User user = context.Users.Where(p=>p.Id == id).FirstOrDefault();
+                User user = context.Users.Where(p => p.Id == id).FirstOrDefault();
                 return View(user);
             }
-           
+
         }
 
         // POST: AcountController/Edit/5
@@ -102,7 +102,7 @@ namespace VacationSplit.Controllers
             }
         }
 
-        
+
         public ActionResult Delete(int id)
         {
             using (var context = new VacationSplitContext())
@@ -112,7 +112,7 @@ namespace VacationSplit.Controllers
                 context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            
+
         }
 
         // POST: AcountController/Delete/5
@@ -134,6 +134,6 @@ namespace VacationSplit.Controllers
         //    {
         //        return RedirectToAction("Index");
         //    }
-       // }
+        // }
     }
 }

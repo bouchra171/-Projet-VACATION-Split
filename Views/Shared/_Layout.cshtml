@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - VacationSplit</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/VacationSplit.styles.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
 </head>
 <body>
     <header>
@@ -39,12 +41,30 @@
                     @RenderBody()
         </main>
     </div>
-
-    <footer class="footer bg-primary text-white mt-5">
-        <div class="container pt-4 pb-3">
-            &copy; 2023 - VacationSplit - <a class="text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer bg-primary text-white mt-5" style="padding: 20px 0; opacity: 0.8; height: 70px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 text-center">
+                    &copy; 2023 - VacationSplit - <a class="text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="social-icons">
+                        <a href="#" class="text-white">
+                            <i class="fab fa-facebook-f fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-white">
+                            <i class="fab fa-instagram fa-lg"></i>
+                        </a>
+                        <a href="#" class="text-white">
+                            <i class="fab fa-twitter fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
+
+    
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
