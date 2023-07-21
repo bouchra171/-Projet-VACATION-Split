@@ -9,7 +9,7 @@ namespace VacationSplit.Repositories
     {
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Category>? Categories { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
