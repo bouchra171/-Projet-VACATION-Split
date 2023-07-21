@@ -21,12 +21,12 @@ namespace VacationSplit.Controllers
         public ActionResult Index()
         {
             using (var context = new VacationSplitContext())
-            {           
+            {
                 _users = context.Users.ToList();
 
                 return View(_users);
             }
-            
+
         }
 
         // GET: AcountController/Details/5
@@ -90,10 +90,10 @@ namespace VacationSplit.Controllers
         {
             using (var context = new VacationSplitContext())
             {
-                User user = context.Users.Where(p=>p.Id == id).FirstOrDefault();
+                User user = context.Users.Where(p => p.Id == id).FirstOrDefault();
                 return View(user);
             }
-           
+
         }
 
         // POST: AcountController/Edit/5
@@ -120,7 +120,7 @@ namespace VacationSplit.Controllers
             }
         }
 
-        
+
         public ActionResult Delete(int id)
         {
             using (var context = new VacationSplitContext())
@@ -130,8 +130,28 @@ namespace VacationSplit.Controllers
                 context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            
+
         }
-    
+
+        // POST: AcountController/Delete/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        using (var context = new VacationSplitContext())
+        //        {
+        //            User user = context.Users.Find(id);
+        //            context.Users.Remove(user);
+        //            context.SaveChanges();
+        //            return RedirectToAction("Index");
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        return RedirectToAction("Index");
+        //    }
+       // }
     }
 }

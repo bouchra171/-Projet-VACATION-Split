@@ -28,6 +28,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<VacationSplitContext>();
 
 var app = builder.Build();
 
