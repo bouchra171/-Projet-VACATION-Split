@@ -22,9 +22,15 @@ namespace VacationSplit.Services
         public bool IsValid(User user)
         {
             return usersDAO.FindUserByEmailAndPassword(user);
-            // return true if found in the list
-            // return knownUsers.Any(x => x.Email == user.Email && x.Password == user.Password);
+            
         }
+        public bool IsValidEmail(string email)
+        {
+            return usersDAO.FindUserByEmail(email);
+
+        }
+
+
 
         public string Encrypt(string clearText)
         {
