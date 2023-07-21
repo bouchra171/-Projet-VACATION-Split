@@ -1,16 +1,22 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using VacationSplit.Models;
 using VacationSplit.Repositories;
 using VacationSplit.Services;
+using System.IO;
+
 
 namespace VacationSplit.Controllers
 {
     public class AccountController : Controller
     {
         static List<User> _users = new List<User>();
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+
+        public AccountController(IWebHostEnvironment webHostEnvironment)
+        {
+            _webHostEnvironment = webHostEnvironment;
+        }
         // GET: AcountController
         public ActionResult Index()
         {
@@ -43,21 +49,33 @@ namespace VacationSplit.Controllers
         // POST: AcountController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Models.User user)
+        public IActionResult Create(Models.User user, IFormFile file)
         {
             try
             {
-                string fileName = Path.GetFileName(user.ProfileImage);
-                user.ProfileImage = "../UsersPictures/" + fileName;
-                //string strFileName =
                 SecurityService securityService = new SecurityService();
+                if (securityService.IsValidEmail(user.Email))
+                {
+                    return View();
+                }
+                string uniqueFileName = null;                
+                if (user.ProfileImg.Length > 0)
+                { 
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "img");
+                    uniqueFileName = Guid.NewGuid().ToString()+ "-" + user.ProfileImg.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        user.ProfileImg.CopyTo(fileStream);
+                    }                        
+                }                
                 string password = user.Password.Trim();
                 user.Password = securityService.Encrypt(password);
+                user.ProfileImage ="/img/"+ uniqueFileName;
                 using (var context = new VacationSplitContext())
                 {
                     context.Add(user);
                     context.SaveChanges();
-
                 }
                 return View("Details", user);
             }
@@ -134,6 +152,6 @@ namespace VacationSplit.Controllers
         //    {
         //        return RedirectToAction("Index");
         //    }
-        // }
+       // }
     }
 }
