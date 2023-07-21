@@ -19,7 +19,10 @@
                 @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProfileImage)
+                @Html.DisplayNameFor(model => model.Ville)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProfileImg)
             </th>
             <th></th>
         </tr>
@@ -39,8 +42,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ville)
+                </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProfileImage)
+                    @Html.DisplayFor(modelItem => item.ProfileImg)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

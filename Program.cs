@@ -14,6 +14,7 @@ using VacationSplit.Repositories;
 //        LastName = "Bournane",
 //        ProfileImage = "C:\\Users\\PC01\\Pictures\\modelisation.PNG",
 //        Email = "mbournane@gmail.com",
+//        Ville = "Paris",
 //        Password = ""
 
 //    };
