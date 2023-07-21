@@ -13,7 +13,7 @@ namespace VacationSplit.Repositories
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-1FRFDGP;Database=VacationSplit;TrustServerCertificate=true;Integrated Security=sspi");
+            optionsBuilder.UseSqlServer(@"Server=LOCALHOST;Database=VacationSplit;TrustServerCertificate=true;Integrated Security=sspi");
 
         }
     }
