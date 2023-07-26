@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿@*<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,9 +11,47 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/VacationSplit.styles.css" asp-append-version="true" />
     @RenderSection("Styles", required: false)
-</head>
+</head>*@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap">
+    <title>VacationSplit</title>
+
+
+
+
+        <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - VacationSplit</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/VacationSplit.styles.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
+
+
+
+    </head>
+
+
+
+
+
+
 <body>
-    <header class="header">
+ @*   <header class="header">
         <nav class="navbar navbar-expand-sm navbar-light bg-primary border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">VacationSplit</a>
@@ -33,7 +71,24 @@
                 </div>
             </div>
         </nav>
+    </header>*@
+
+
+    <header>
+        <a href="index.html" class="logo"><span>VACATION</span>Split</a>
+        <div class="menuToggle" onclick="toggleMenu();"></div>
+        <ul class="navbar">
+            <li><a href="@Url.Action("Index", "Home")">Accueil</a></li>
+            <li><a href="#apropos" onclick="toggleMenu();">À propos</a></li>
+            <li><a href="@Url.Action("Index", "Categories")" onclick="toggleMenu();">Catégories</a></li>
+            <li><a href="#" onclick="toggleMenu();">Dépenses </a></li>
+            <li><a href="@Url.Action("Create", "Account")" onclick="toggleMenu();">Inscription</a></li>
+            <li><a href="@Url.Action("Index", "Login")" onclick="toggleMenu();">Connexion  </a></li>
+            
+        </ul>
     </header>
+
+
 
 
     <div class="container">
@@ -42,7 +97,8 @@
                     @RenderBody()
         </main>
     </div>
-    <footer class="footer bg-primary text-white mt-5" style="padding: 20px 0; opacity: 0.8; height: 70px;">
+
+    <footer class="footer footer-custom text-white mt-5" style="padding: 10px 0; opacity: 0.8; height: 70px;">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6 text-center">
@@ -65,7 +121,21 @@
         </div>
     </footer>
 
-    
+
+
+    <script type="text/javascript">
+        window.addEventListener('scroll', function () {
+            const header = document.querySelector('header');
+            header.classList.toggle("sticky", window.scrollY > 0);
+        });
+
+        function toggleMenu() {
+            const tmenuToggle = document.querySelector('.menuToggle');
+            const navbar = document.querySelector('.navbar');
+            navbar.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        }
+    </script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

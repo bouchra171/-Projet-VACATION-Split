@@ -2,7 +2,75 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+@*<div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+</div>*@
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap">
+    <title>VacationSplit</title>
+
+   
+    </head>
+   
+    
+    <body>
+        <section class="banniere" id="banniere">
+            <div class="contenu">
+                <h2>BIENVENUE SUR VacationSplit <br><br></h2>
+            <p>Suivre les comptes et partager les dépenses entre ami(e)s. <br> Voyagez l'esprit léger avec notre application de gestion de dépenses pendant les vacances. Bon voyage !<br><br></p>
+                <a href="#" class="btn1">Inscription</a>
+                <a href="#connexion" class="btn2">Connexion</a>
+            </div>
+        </section>
+        <section class="apropos" id="apropos">
+            <div class="row">
+                <div class="col50">
+                    <p>   </p>
+                    <h2 class="titre-texte"><span>À</span> Propos De Nous</h2>
+                    <p>
+                    Découvrez notre application de gestion de dépenses pour des vacances sans soucis !
+                    Profitez pleinement de chaque moment sans vous soucier des comptes. Notre application facilite le suivi et le partage des dépenses entre amis et en famille.
+                    Créez un groupe de voyage, ajoutez les participants et enregistrez les dépenses en temps réel. Fini les calculs compliqués, tout est clair et transparent.
+                    Catégorisez les dépenses pour mieux gérer votre budget. Sécurité et confidentialité garanties.
+                    Utilisez notre application et vivez des vacances inoubliables en toute sérénité ! Bon voyage !
+                      
+                    </p>
+                </div>
+                <div class="col50">
+                    <div class="img">
+                        <img src="./img/split2.png" alt="image">
+                    </div>
+                </div>
+            </div>
+        </section>
+ 
+
+    
+        <script type="text/javascript">
+            window.addEventListener('scroll', function(){
+                const header =document.querySelector('header');
+                header.classList.toggle("sticky", window.scrollY > 0 );
+            });
+
+            function toggleMenu(){
+                const tmenuToggle = document.querySelector('.menuToggle');
+                const navbar = document.querySelector('.navbar');
+                navbar.classList.toggle('active');
+                menuToggle.classList.toggle('active');
+            }
+        </script>
+    </body>
+</html>
