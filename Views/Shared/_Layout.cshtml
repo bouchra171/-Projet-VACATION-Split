@@ -75,16 +75,23 @@
 
 
     <header>
-        <a href="index.html" class="logo"><span>VACATION</span>Split</a>
+        <a href="@Url.Action("Index", "Home")" class="logo"><span>VACATION</span>Split</a>
         <div class="menuToggle" onclick="toggleMenu();"></div>
         <ul class="navbar">
-            <li><a href="@Url.Action("Index", "Home")">Accueil</a></li>
-            <li><a href="#apropos" onclick="toggleMenu();">À propos</a></li>
-            <li><a href="@Url.Action("Index", "Categories")" onclick="toggleMenu();">Catégories</a></li>
-            <li><a href="#" onclick="toggleMenu();">Dépenses </a></li>
-            <li><a href="@Url.Action("Create", "Account")" onclick="toggleMenu();">Inscription</a></li>
-            <li><a href="@Url.Action("Index", "Login")" onclick="toggleMenu();">Connexion  </a></li>
-            
+@*    @{        
+                if (HttpContext.Session.GetString("IsLoggedIn") == null)
+                {*@
+                    <li><a href="@Url.Action("Index", "Home") onclick="toggleMenu();">Accueil</a></li>
+                    <li><a href="#apropos" onclick="toggleMenu();">À propos</a></li>
+                    <li><a href="@Url.Action("Create", "Account")" onclick="toggleMenu();">Inscription</a></li>
+                    <li><a href="@Url.Action("Index", "Login")" onclick="toggleMenu();">Connexion  </a></li>
+            @*    }
+                 else
+                 {*@
+                    <li><a href="@Url.Action("Index", "Categories")" onclick="toggleMenu();">Catégories</a></li>
+                    <li><a href="#" onclick="toggleMenu();">Dépenses </a></li>
+     @*            }
+     }  *@     
         </ul>
     </header>
 
@@ -106,13 +113,13 @@
                 </div>
                 <div class="col-md-6 text-center">
                     <div class="social-icons">
-                        <a href="#" class="text-white">
+                        <a href="#" class="text-white" style="margin-right: 15px;">
                             <i class="fab fa-facebook-f fa-lg"></i>
                         </a>
-                        <a href="#" class="text-white">
+                        <a href="#" class="text-white" style="margin-right: 15px;">
                             <i class="fab fa-instagram fa-lg"></i>
                         </a>
-                        <a href="#" class="text-white">
+                        <a href="#" class="text-white" style="margin-right: 15px;">
                             <i class="fab fa-twitter fa-lg"></i>
                         </a>
                     </div>

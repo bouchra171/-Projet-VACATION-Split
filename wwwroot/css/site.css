@@ -9,7 +9,13 @@ html {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #2F4F4F;
+}
+
+html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 html {
@@ -42,22 +48,23 @@ body {
         color: #111;
     }
 
-    header {
-        position: fixed;
-        top: 0%;
-        left: 0%;
-        padding: 20px 10px;
-        width: 100%;
-        z-index: 1;
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
-        transition: 0.5s;
-    }
+header {
+    /*position: fixed;*/
+    position: sticky;
+    top: 0%;
+    left: 0%;
+    padding: 20px 10px;
+    width: 100%;
+    z-index: 1;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    transition: 0.5s;
+}
 
     .logo {
-        color: #fff;
-        font-weight: bold; /*logo en gras */
+        /*color: #2F4F4F;*/
+        font-weight: bold; /* logo en gras */
         font-size: 1.5em;
         text-decoration: none;
     }
@@ -82,7 +89,7 @@ body {
             margin-left: 30px; /* pour reer un peut d'espace entre les elements */
             font-weight: 700;
         }
-
+/*
     .btn-contact {
         padding: 5px 10px;
         background: #2F4F4F;
@@ -93,7 +100,7 @@ body {
         .btn-contact:hover {
             background: #FF0000;
             transition: ease-out;
-        }
+        }*/
 
 header .navbar li a:hover {
     color: #ff6a00;
@@ -101,18 +108,23 @@ header .navbar li a:hover {
 }
 
 .banniere {
-    /*position: relative;*/
-    width: 100%;
-     min-height: 100vh;
-    /*  height: 100%;*/
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     background-image: url('/img/camera.jpg');
     background-size: cover;
-    /*background-size: contain;*/
-   /* background-position: center;*/
+    background-position: center;
 }
+
+
+
 
 
         .banniere .contenu {
@@ -238,9 +250,9 @@ header .navbar li a:hover {
             color: #000;
         }
 
-        header.sticky .navbar li a {
-            color: #000;
-        }
+header .navbar li a {
+    color: #2F4F4F;
+}
 
         header.sticky li a:hover {
             color: #ff6a00;
@@ -284,25 +296,6 @@ header .navbar li a:hover {
             background: #ffff;
             align-items: center;
         }
-
-        .menuToggle {
-            position: relative;
-            width: 40px;
-            height: 40px;
-            background-image: url('/img/valis.jpg');
-            background-repeat: no-repeat;
-            background-position: center;
-            cursor: pointer;
-            background-size: 30px;
-        }
-
-            .menuToggle.active {
-                background-image: url('/img/menar.png');
-                background-size: 25px;
-                background-repeat: no-repeat;
-                 /*background-origin: center;*/
-                background-position: center;
-            }
 
         header.sticky .menuToggle {
             filter: invert(1);
