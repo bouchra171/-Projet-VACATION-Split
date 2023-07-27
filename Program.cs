@@ -1,6 +1,8 @@
 using VacationSplit.Models;
 using VacationSplit.Repositories;
 
+using Microsoft.Extensions.DependencyInjection;
+
 //using (var context = new VacationSplitContext())
 //{
 //    context.Database.EnsureDeleted();

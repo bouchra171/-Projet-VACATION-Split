@@ -17,12 +17,24 @@ namespace VacationSplit.Controllers
 
             if (securityService.IsValid(user)) 
             {
-                return View("LoginSuccess", user);
+                //return View("LoginSuccess", user);
             } else 
             {
                 return View("LoginFailure", user);
             }
-            
+
+
+            HttpContext.Session.SetString("IsLoggedIn", "true");
+            return RedirectToAction("Index", "Home");
+
+        }
+
+        // Action pour la déconnexion
+        public IActionResult Logout()
+        {
+            // Supprimez la valeur de la session pour indiquer que l'utilisateur n'est plus connecté
+            HttpContext.Session.Remove("IsLoggedIn");
+            return RedirectToAction("Index", "Home");
         }
 
     }
