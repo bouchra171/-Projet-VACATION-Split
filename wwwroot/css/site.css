@@ -89,18 +89,6 @@ header {
             margin-left: 30px; /* pour reer un peut d'espace entre les elements */
             font-weight: 700;
         }
-/*
-    .btn-contact {
-        padding: 5px 10px;
-        background: #2F4F4F;
-        margin-top: -5px;
-        text-transform: uppercase;
-    }
-
-        .btn-contact:hover {
-            background: #FF0000;
-            transition: ease-out;
-        }*/
 
 header .navbar li a:hover {
     color: #ff6a00;
