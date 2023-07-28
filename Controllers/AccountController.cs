@@ -1,42 +1,42 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VacationSplit.Models;
-using VacationSplit.Repositories;
+using VacationSplit.Data;
 using VacationSplit.Services;
 using System.IO;
-
+using VacationSplit.IServices;
 
 namespace VacationSplit.Controllers
 {
     public class AccountController : Controller
     {
         static List<User> _users = new List<User>();
+        private readonly VacationSplitContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly ISecurityService _securityService;
 
 
-        public AccountController(IWebHostEnvironment webHostEnvironment)
+        public AccountController(IWebHostEnvironment webHostEnvironment, VacationSplitContext context, ISecurityService securityService)
         {
             _webHostEnvironment = webHostEnvironment;
+            _context = context;
+            _securityService = securityService;
+
         }
         // GET: AcountController
         public ActionResult Index()
-        {
-            using (var context = new VacationSplitContext())
-            {
-                _users = context.Users.ToList();
+        {           
+                _users = _context.Users.ToList();
 
                 return View(_users);
-            }
+            
 
         }
 
         // GET: AcountController/Details/5
         public ActionResult Details(int id)
-        {
-            using (var context = new VacationSplitContext())
-            {
-                User user = context.Users.Where(p => p.Id == id).FirstOrDefault();
-                return View(user);
-            }
+        {           
+                User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
+                return View(user);            
 
         }
 
@@ -53,8 +53,8 @@ namespace VacationSplit.Controllers
         {
             try
             {
-                SecurityService securityService = new SecurityService();
-                if (securityService.IsValidEmail(user.Email))
+                
+                if (_securityService.IsValidEmail(user.Email))
                 {
                     return View();
                 }
@@ -70,13 +70,12 @@ namespace VacationSplit.Controllers
                     }                        
                 }                
                 string password = user.Password.Trim();
-                user.Password = securityService.Encrypt(password);
+                user.Password = _securityService.Encrypt(password);
                 user.ProfileImage ="/img/"+ uniqueFileName;
-                using (var context = new VacationSplitContext())
-                {
-                    context.Add(user);
-                    context.SaveChanges();
-                }
+
+                    _context.Add(user);
+                    _context.SaveChanges();
+               
                 return View("Details", user);
             }
             catch
@@ -88,12 +87,8 @@ namespace VacationSplit.Controllers
         // GET: AcountController/Edit/5
         public ActionResult Edit(int id)
         {
-            using (var context = new VacationSplitContext())
-            {
-                User user = context.Users.Where(p => p.Id == id).FirstOrDefault();
+                User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
                 return View(user);
-            }
-
         }
 
         // POST: AcountController/Edit/5
@@ -103,16 +98,13 @@ namespace VacationSplit.Controllers
         {
             try
             {
-                using (var context = new VacationSplitContext())
-                {
-                    SecurityService securityService = new SecurityService();
                     string password = user.Password.Trim();
-                    user.Password = securityService.Encrypt(password);
-                    context.Update(user);
-                    context.SaveChanges();
-                    return View("Details", context.Users.Where(p => p.Id == user.Id).FirstOrDefault());
+                    user.Password = _securityService.Encrypt(password);
+                    _context.Update(user);
+                    _context.SaveChanges();
+                    return View("Details", _context.Users.Where(p => p.Id == user.Id).FirstOrDefault());
 
-                }
+           
             }
             catch
             {
@@ -123,35 +115,13 @@ namespace VacationSplit.Controllers
 
         public ActionResult Delete(int id)
         {
-            using (var context = new VacationSplitContext())
-            {
-                User user = context.Users.Find(id);
-                context.Users.Remove(user);
-                context.SaveChanges();
+                User user = _context.Users.Find(id);
+                _context.Users.Remove(user);
+                _context.SaveChanges();
                 return RedirectToAction("Index");
-            }
 
         }
 
-        // POST: AcountController/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        using (var context = new VacationSplitContext())
-        //        {
-        //            User user = context.Users.Find(id);
-        //            context.Users.Remove(user);
-        //            context.SaveChanges();
-        //            return RedirectToAction("Index");
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        return RedirectToAction("Index");
-        //    }
-       // }
+        
     }
 }
