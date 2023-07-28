@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using VacationSplit.Services;
 using VacationSplit.IServices;
 
+using Microsoft.Extensions.DependencyInjection;
+
 //using (var context = new VacationSplitContext())
 //{
 //    context.Database.EnsureDeleted();
