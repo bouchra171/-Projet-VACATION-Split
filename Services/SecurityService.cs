@@ -1,32 +1,34 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 using System.Text;
+using VacationSplit.Data;
+using VacationSplit.IServices;
 using VacationSplit.Models;
 
 namespace VacationSplit.Services
 {
-    public class SecurityService
+    public class SecurityService: ISecurityService
     {
-
-      //  List<User> knownUsers = new List<User> ();
-        UsersDAO usersDAO = new UsersDAO ();
-
-        public SecurityService()
+        private readonly ILoginService _loginService;
+        private readonly VacationSplitContext _context;
+        public SecurityService(VacationSplitContext context)
         {
-           /*
-            knownUsers.Add (new User { Id = 0, Email = "BillGates", Password = "bigbucks"});
-            knownUsers.Add(new User { Id = 1, Email = "MarieCurie", Password = "radioactive" });
-            knownUsers.Add(new User { Id = 2, Email = "WatstonCrick", Password = "dna" });
-            knownUsers.Add(new User { Id = 3, Email = "Alexander", Password = "abcdef" }); */
+            _context = context;
         }
+
+        //  List<User> knownUsers = new List<User> ();
+        //LoginService usersDAO = new UsersDAO ();
+
+        
 
         public bool IsValid(User user)
         {
-            return usersDAO.FindUserByEmailAndPassword(user);
+            return FindUserByEmailAndPassword(user);
             
         }
         public bool IsValidEmail(string email)
         {
-            return usersDAO.FindUserByEmail(email);
+            return FindUserByEmail(email);
 
         }
 
@@ -74,6 +76,47 @@ namespace VacationSplit.Services
                 }
             }
             return cipherText;
+        }
+        public bool FindUserByEmailAndPassword(User user)
+        {
+
+            bool success = false;
+
+
+
+            try
+            {
+                string encryptedPassword = Encrypt(user.Password);
+
+                success = _context.Users.Any(p => p.Password == encryptedPassword && p.Email == user.Email);
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return success;
+
+        }
+        public bool FindUserByEmail(string email)
+        {
+
+            bool success = false;
+            try
+            {
+
+                success = _context.Users.Any(p => p.Email == email);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return success;
+
         }
 
     }

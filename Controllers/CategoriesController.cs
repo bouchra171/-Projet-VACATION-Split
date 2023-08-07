@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VacationSplit.Models;
 using Microsoft.EntityFrameworkCore;
-using VacationSplit.Repositories;
+using VacationSplit;
+using VacationSplit.Data;
 
 
 public class CategoriesController : Controller
