@@ -9,6 +9,7 @@ namespace VacationSplit.IServices
         string Encrypt(string clearText);
         string Decrypt(string clearText);
         bool IsValidEmail(string email);
-       
+        User GetUserByEmail(string email);
+
     }
 }

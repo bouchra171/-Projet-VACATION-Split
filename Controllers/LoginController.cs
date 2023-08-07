@@ -40,17 +40,30 @@ namespace VacationSplit.Controllers
             if (_securityService.IsValid(user)) 
             {
 
-                // Authentification réussie, connecter l'utilisateur
-                HttpContext.Session.SetString("IsLoggedIn", "true");       
+                
+                    // Authentification réussie, connecter l'utilisateur
+                    HttpContext.Session.SetString("IsLoggedIn", "true");
 
-                if (!string.IsNullOrEmpty(user.FirstName))
-                {
-                    HttpContext.Session.SetString("UserName", user.FirstName); // Enregistrez le nom de l'utilisateur dans la session
-                }
+                    // Récupérer les informations de l'utilisateur à partir de la base de données
+                    User userInfo = _securityService.GetUserByEmail(user.Email);
+                    if (userInfo != null)
+                    {
+                        HttpContext.Session.SetString("UserName", userInfo.FirstName); // Enregistrez le prénom de l'utilisateur dans la session
+                        HttpContext.Session.SetString("UserLastName", userInfo.LastName); // Enregistrez le nom de famille de l'utilisateur dans la session
+                    }
 
-                return RedirectToAction("Index", "Home");
+                    //// Authentification réussie, connecter l'utilisateur
+                    //HttpContext.Session.SetString("IsLoggedIn", "true");
 
-                //return View("LoginSuccess", user);
+                    //User u = _securityService.FindUserByEmail(user.Email);
+
+                    //if (!string.IsNullOrEmpty(user.FirstName))
+                    //{
+                    //    HttpContext.Session.SetString("UserName", user.FirstName); // Enregistrez le nom de l'utilisateur dans la session
+                    //}
+
+                    return RedirectToAction("Index", "Home");
+
             } else 
             {
                 return View("LoginFailure", user);
