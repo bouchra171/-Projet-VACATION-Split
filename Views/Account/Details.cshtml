@@ -1,37 +1,172 @@
 ﻿@model VacationSplit.Models.User
 
-<div class="wrapper">
-    <div class="profile-top">
-        <div class="profile-image" style="background-image : url(@Model.ProfileImage)"></div>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f7f7f7;  
+    }
+
+    .card {
+        max-width: 800px;
+        margin: 50px auto;
+        display: flex;
+        flex-direction: column;
+        border-radius: 5px;
+        box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
+        background-color: #fff;
+        overflow: hidden;
+    }
+
+    .card-header {
+        background: #595959;
+        border-radius: 10px 10px 0 0;
+        color: #FFF;
+        padding: 10px;
+        font-size:1.5em;
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: stretch;
+        padding: 20px;
+        flex-grow:1;
+    }
+
+    .image-container {
+        flex: 1 0 10%;
+        border-right: 1px solid #ddd;
+        display: flex;
+        align-items:center;
+        justify-content:center;
+        overflow: hidden;
+        margin-right: 20px;
+    }
+
+    .form-container {
+        flex: 1; 
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 20px;
+        border: 2px solid #ddd; 
+        border-radius: 5px; 
+        margin-left: 20px;
+    }
+
+    .form-group:last-of-type {
+        margin-bottom: 50px; 
+    }
+
+    .control-label {
+        font-weight: bold;
+        font-size:1.1em;
+        display:block;
+        margin-bottom:10px;
+        color: rgba(0, 0, 0, 0.7);
+    }
+
+    .form-control, .btn {
+        border-radius: 5px;
+        padding:10px;
+        font-size:1.1em;
+        background: #fff;
+        transition: box-shadow .3s, background .3s;
+        border: 1px solid #ddd;
+        font-family: 'Montserrat', sans-serif;
+        color: rgba(0, 0, 0, 0.7);
+    }
+
+    .form-control:focus, .btn:focus {
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-color: rgba(0, 0, 0, 0.1);
+        background: transparent;
+        color: rgba(0, 0, 0, 0.7);
+    }
+
+    .btn-primary {
+        background: #ff8c00;
+        border : none;
+        color: #FFF;
+        padding: 10px 20px;
+        transition:all 0.5s;
+    }
+
+    .btn-primary:hover {
+        background: #e87928;
+        opacity: 0.9;
+    }
+
+    .image-container img {
+        height:100%;
+        object-fit:cover;
+    }
+
+    @@media only screen and (max-width: 800px) {
+        .card-body {
+            flex-direction: column;
+        }
+
+        .image-container, .form-container {
+            height: auto;
+            flex: none;
+        }
+
+        .image-container img {
+            height: auto; 
+            width:100%;
+        }
+    }
+</style>
+
+<div class="card">
+    <div class="card-header text-center">
+        <h3>User Details</h3>
     </div>
-
-    <div class="profile-bottom">        
-        <div class="profile-infos" >
-            <div class="main-infos">
-                <h3 class="name">@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</h3>
-                <p class="age grey">26</p>
-            </div>
-            <p class="email"> @Html.DisplayFor(model => model.Email)</p>
-            <p class="ville"><ion-icon name="location"></ion-icon>@Html.DisplayFor(model => model.Ville)</p>
+    <div class="card-body">
+        <div class="image-container">
+            @if (!string.IsNullOrEmpty(Model.ProfileImage))
+            {
+                <img src="@Url.Content(Model.ProfileImage)" alt="Profile Image" />
+            }
+            else
+            {
+                <p>No profile image available.</p>
+            }
         </div>
-
-        <div class="profile-stats">
-            <div class="stat-item">
-                <p class="stat">38K</p>
-                <p class="grey">Abonnés</p>
-            </div>
-            <div class="stat-item">
-                <p class="stat">103K</p>
-                <p class="grey">Likes</p>
-            </div>
-            <div class="stat-item">
-                <p class="stat">1.3K</p>
-                <p class="grey">Photos</p>
-            </div>
+        <div class="form-container">
+            @if (Model != null)
+            {
+                <div class="form-group">
+                    <label class="control-label">Email:</label>
+                    <p class="form-control">@Model.Email</p>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">First Name:</label>
+                    <p class="form-control">@Model.FirstName</p>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Last Name:</label>
+                    <p class="form-control">@Model.LastName</p>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Ville:</label>
+                    <p class="form-control">@Model.Ville</p>
+                </div>
+            }
+            else
+            {
+                <p>User not found.</p>
+            }
         </div>
+    </div>
+    <div class="card-footer text-center">
+        @if (Model != null)
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        }
+        <a asp-action="Index" class="btn btn-primary">Back to List</a>
     </div>
 </div>
-<script type="module"
-        src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule
-        src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
