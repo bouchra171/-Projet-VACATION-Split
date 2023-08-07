@@ -23,8 +23,6 @@ namespace VacationSplit.Controllers
                 // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = true;
                 ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
-               
-                Console.WriteLine("toto=", HttpContext.Session.GetString("UserName"));
             }
             else
             {
@@ -58,9 +56,6 @@ namespace VacationSplit.Controllers
                 return View("LoginFailure", user);
             }
 
-
-            //HttpContext.Session.SetString("IsLoggedIn", "true");
-            //return RedirectToAction("Index", "Home");
 
         }
 
