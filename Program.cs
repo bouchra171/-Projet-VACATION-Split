@@ -41,7 +41,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<VacationSplitContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("VacationSplitDB")));
 builder.Services.AddScoped<ILoginService, LoginService>();
-builder.Services.AddScoped<ISecurityService, SecurityService>(); 
+builder.Services.AddScoped<ISecurityService, SecurityService>();
+
+builder.Services.AddDistributedMemoryCache(); // Ajouter le cache en mémoire pour stocker les sessions
+
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = ".VacationSplit.Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Définir le délai d'expiration de la session
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -57,6 +69,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

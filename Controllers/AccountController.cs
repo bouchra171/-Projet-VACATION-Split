@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VacationSplit.Models;
 using VacationSplit.Data;
-using VacationSplit.Services;
+using Microsoft.AspNetCore.Http;
 using System.IO;
 using VacationSplit.IServices;
 
@@ -24,8 +24,20 @@ namespace VacationSplit.Controllers
         }
         // GET: AcountController
         public ActionResult Index()
-        {           
-                _users = _context.Users.ToList();
+        {
+            if (HttpContext.Session.GetString("IsLoggedIn") == "true")
+            {
+                // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = true;
+                ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
+            }
+            else
+            {
+                // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = false;
+            }
+
+            _users = _context.Users.ToList();
 
                 return View(_users);
             
@@ -43,8 +55,23 @@ namespace VacationSplit.Controllers
         // GET: AcountController/Create
         public ActionResult Create()
         {
-            return View();
-        }
+            if (HttpContext.Session.GetString("IsLoggedIn") == "true")
+            {
+                // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = true;
+                ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
+            }
+            else
+            {
+                // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = false;
+            }
+
+            //// Définir la valeur de ViewBag.IsLoggedIn en fonction de l'état de connexion de l'utilisateur
+            //ViewBag.IsLoggedIn = HttpContext.Session.GetString("IsLoggedIn") == "true";
+
+                return View();
+            }
 
         // POST: AcountController/Create
         [HttpPost]
@@ -75,7 +102,12 @@ namespace VacationSplit.Controllers
 
                     _context.Add(user);
                     _context.SaveChanges();
-               
+
+                // Connecter l'utilisateur après la création du compte
+                HttpContext.Session.SetString("UserName", user.FirstName); // Enregistrez le nom de l'utilisateur dans la session
+                HttpContext.Session.SetString("IsLoggedIn", "true"); // Marquez l'utilisateur comme connecté
+
+
                 return View("Details", user);
             }
             catch
