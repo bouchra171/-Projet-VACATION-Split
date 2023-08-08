@@ -17,6 +17,18 @@ public class CategoriesController : Controller
     // GET: Categories
     public async Task<IActionResult> Index()
     {
+        if (HttpContext.Session.GetString("IsLoggedIn") == "true")
+        {
+            // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
+            ViewBag.IsLoggedIn = true;
+            ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
+        }
+        else
+        {
+            // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
+            ViewBag.IsLoggedIn = false;
+        }
+
         return View(await _context.Categories.ToListAsync());
     }
 

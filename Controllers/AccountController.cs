@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using VacationSplit.Models;
 using VacationSplit.Data;
-using VacationSplit.Services;
+using Microsoft.AspNetCore.Http;
 using System.IO;
 using VacationSplit.IServices;
 
@@ -9,7 +9,7 @@ namespace VacationSplit.Controllers
 {
     public class AccountController : Controller
     {
-         List<User> _users = new List<User>();
+        static List<User> _users = new List<User>();
         private readonly VacationSplitContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ISecurityService _securityService;
@@ -25,26 +25,53 @@ namespace VacationSplit.Controllers
         // GET: AcountController
         public ActionResult Index()
         {
+            if (HttpContext.Session.GetString("IsLoggedIn") == "true")
+            {
+                // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = true;
+                ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
+            }
+            else
+            {
+                // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = false;
+            }
+
             _users = _context.Users.ToList();
 
-            return View(_users);
-
+                return View(_users);
+            
 
         }
 
         // GET: AcountController/Details/5
         public ActionResult Details(int id)
-        {
-            User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
-            return View(user);
+        {           
+                User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
+                return View(user);            
 
         }
 
         // GET: AcountController/Create
         public ActionResult Create()
         {
-            return View();
-        }
+            if (HttpContext.Session.GetString("IsLoggedIn") == "true")
+            {
+                // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = true;
+                ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
+            }
+            else
+            {
+                // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = false;
+            }
+
+            //// Définir la valeur de ViewBag.IsLoggedIn en fonction de l'état de connexion de l'utilisateur
+            //ViewBag.IsLoggedIn = HttpContext.Session.GetString("IsLoggedIn") == "true";
+
+                return View();
+            }
 
         // POST: AcountController/Create
         [HttpPost]
@@ -53,28 +80,33 @@ namespace VacationSplit.Controllers
         {
             try
             {
-
+                
                 if (_securityService.IsValidEmail(user.Email))
                 {
                     return View();
                 }
-                string uniqueFileName = null;
+                string uniqueFileName = null;                
                 if (user.ProfileImg.Length > 0)
-                {
+                { 
                     string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "img");
-                    uniqueFileName = Guid.NewGuid().ToString() + "-" + user.ProfileImg.FileName;
+                    uniqueFileName = Guid.NewGuid().ToString()+ "-" + user.ProfileImg.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         user.ProfileImg.CopyTo(fileStream);
-                    }
-                }
+                    }                        
+                }                
                 string password = user.Password.Trim();
                 user.Password = _securityService.Encrypt(password);
-                user.ProfileImage = "/img/" + uniqueFileName;
+                user.ProfileImage ="/img/"+ uniqueFileName;
 
-                _context.Add(user);
-                _context.SaveChanges();
+                    _context.Add(user);
+                    _context.SaveChanges();
+
+                // Connecter l'utilisateur après la création du compte
+                HttpContext.Session.SetString("UserName", user.FirstName); // Enregistrez le nom de l'utilisateur dans la session
+                HttpContext.Session.SetString("IsLoggedIn", "true"); // Marquez l'utilisateur comme connecté
+
 
                 return View("Details", user);
             }
@@ -87,42 +119,24 @@ namespace VacationSplit.Controllers
         // GET: AcountController/Edit/5
         public ActionResult Edit(int id)
         {
-            User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
-            return View(user);
+                User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
+                return View(user);
         }
 
         // POST: AcountController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Models.User updatedUser)
+        public ActionResult Edit(Models.User user)
         {
             try
             {
-                
-                User user = _context.Users.FirstOrDefault(u => u.Id == updatedUser.Id);
-
-                if (user != null)
-                {
-                    user.FirstName = updatedUser.FirstName;
-                    user.LastName = updatedUser.LastName;
-                    user.Email = updatedUser.Email;
-                    string password = updatedUser.Password.Trim();
-
-                    
-                    if (password != null)
-                    {
-                        user.Password = _securityService.Encrypt(password);
-                    }
-
-                    
+                    string password = user.Password.Trim();
+                    user.Password = _securityService.Encrypt(password);
                     _context.Update(user);
                     _context.SaveChanges();
                     return View("Details", _context.Users.Where(p => p.Id == user.Id).FirstOrDefault());
-                }
-                else
-                {
-                    return NotFound();
-                }
+
+           
             }
             catch
             {
@@ -130,15 +144,17 @@ namespace VacationSplit.Controllers
             }
         }
 
+
         public ActionResult Delete(int id)
         {
-            User user = _context.Users.Find(id);
-            _context.Users.Remove(user);
-            _context.SaveChanges();
-            return RedirectToAction("Index");
+                User user = _context.Users.Find(id);
+                _context.Users.Remove(user);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
 
         }
 
-
+        
     }
+
 }

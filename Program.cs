@@ -7,34 +7,6 @@ using VacationSplit.IServices;
 
 using Microsoft.Extensions.DependencyInjection;
 
-//using (var context = new VacationSplitContext())
-//{
-//    context.Database.EnsureDeleted();
-//    context.Database.EnsureCreated();
-//    var user = new User
-//    {
-//        FirstName = "Mohamed",
-//        LastName = "Bournane",
-//        ProfileImage = "C:\\Users\\PC01\\Pictures\\modelisation.PNG",
-//        Email = "mbournane@gmail.com",
-//        Ville = "Paris",
-//        Password = ""
-//    };
-//    var Category = new Category
-//    {
-//        Name = "Restaurant"
-//    };
-//    //var Expense = new Expense
-//    //{
-//    //    DateExpense = DateTime.Now,
-//    //    Amount = 75,
-//    //    Category =
-//    //};
-//    context.Add(user);
-//    context.Add(Category);
-//    context.SaveChanges();
-//}
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -44,14 +16,17 @@ builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ISecurityService, SecurityService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
+builder.Services.AddDistributedMemoryCache(); // Ajouter le cache en mémoire pour stocker les sessions
 
+builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(20); // Vous pouvez ajuster le délai d'inactivité selon vos besoins
+    options.Cookie.Name = ".VacationSplit.Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Définir le délai d'expiration de la session
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -69,6 +44,8 @@ app.UseStaticFiles();
 app.UseSession();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

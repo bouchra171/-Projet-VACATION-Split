@@ -119,5 +119,24 @@ namespace VacationSplit.Services
 
         }
 
+
+        public User GetUserByEmail(string email)
+        {
+            try
+            {
+                // Recherche de l'utilisateur dans la base de données par son adresse e-mail
+                User user = _context.Users.FirstOrDefault(p => p.Email == email);
+
+                return user; // Retourne l'utilisateur trouvé ou null s'il n'existe pas
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null; // En cas d'erreur, renvoie null
+            }
+        }
+
+
+
     }
 }

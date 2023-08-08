@@ -25,9 +25,13 @@
         <section class="banniere" id="banniere">
             <div class="contenu">
                 <h2>BIENVENUE SUR VacationSplit <br><br></h2>
-            <p>Suivre les comptes et partager les dépenses entre ami(e)s. <br> Voyagez l'esprit léger avec notre application de gestion de dépenses pendant les vacances. Bon voyage !<br><br></p>
-            <a href="@Url.Action("Create", "Account")" class="btn1">Inscription</a>
-            <a href="@Url.Action("Index", "Login")" class="btn2">Connexion</a>
+            <p>Suivre les comptes et partager les dépenses entre ami(e)s. <br> Voyagez l'esprit léger avec notre application de gestion de dépenses pendant les vacances.<br/> Bon voyage !<br><br></p>
+            
+             @if (ViewBag.IsLoggedIn == null || !(bool)ViewBag.IsLoggedIn)
+            {
+                <a href="@Url.Action("Create", "Account")" class="btn1">Inscription</a>
+                <a href="@Url.Action("Index", "Login")" class="btn2">Connexion</a>
+            }
             </div>
         </section>
         <section class="apropos" id="apropos">
