@@ -1,5 +1,3 @@
-using VacationSplit;
-using VacationSplit.Models;
 using VacationSplit.Data;
 using Microsoft.EntityFrameworkCore;
 using VacationSplit.Services;

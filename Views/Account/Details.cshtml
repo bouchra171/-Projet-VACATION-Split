@@ -122,15 +122,8 @@
         <h3>User Details</h3>
     </div>
     <div class="card-body">
-        <div class="image-container">
-            @if (!string.IsNullOrEmpty(Model.ProfileImage))
-            {
-                <img src="@Url.Content(Model.ProfileImage)" alt="Profile Image" />
-            }
-            else
-            {
-                <p>No profile image available.</p>
-            }
+        <div class="image-container">           
+                <img src="@Model.ProfileImage" alt="Profile Image" />          
         </div>
         <div class="form-container">
             @if (Model != null)
@@ -154,7 +147,7 @@
             }
             else
             {
-                <p>User not found.</p>
+                <p>Utilisateur non trouvé.</p>
             }
         </div>
     </div>

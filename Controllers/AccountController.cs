@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using VacationSplit.Models;
 using VacationSplit.Data;
-using Microsoft.AspNetCore.Http;
-using System.IO;
 using VacationSplit.IServices;
 
 namespace VacationSplit.Controllers
@@ -86,7 +84,7 @@ namespace VacationSplit.Controllers
                     return View();
                 }
                 string uniqueFileName = null;                
-                if (user.ProfileImg.Length > 0)
+                if (user.ProfileImg != null)
                 { 
                     string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "img");
                     uniqueFileName = Guid.NewGuid().ToString()+ "-" + user.ProfileImg.FileName;
@@ -94,8 +92,14 @@ namespace VacationSplit.Controllers
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         user.ProfileImg.CopyTo(fileStream);
-                    }                        
-                }                
+                    }
+                    user.ProfileImage = "/img/" + uniqueFileName;
+                }
+                else
+                {
+                    user.ProfileImage = "/img/avatar.jpg";
+                }
+                
                 string password = user.Password.Trim();
                 user.Password = _securityService.Encrypt(password);
                 user.ProfileImage ="/img/"+ uniqueFileName;
