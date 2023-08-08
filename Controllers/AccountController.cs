@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using VacationSplit.Models;
 using VacationSplit.Data;
 using VacationSplit.Services;
@@ -24,19 +24,19 @@ namespace VacationSplit.Controllers
         }
         // GET: AcountController
         public ActionResult Index()
-        {           
-                _users = _context.Users.ToList();
+        {
+            _users = _context.Users.ToList();
 
-                return View(_users);
-            
+            return View(_users);
+
 
         }
 
         // GET: AcountController/Details/5
         public ActionResult Details(int id)
-        {           
-                User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
-                return View(user);            
+        {
+            User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
+            return View(user);
 
         }
 
@@ -53,29 +53,29 @@ namespace VacationSplit.Controllers
         {
             try
             {
-                
+
                 if (_securityService.IsValidEmail(user.Email))
                 {
                     return View();
                 }
-                string uniqueFileName = null;                
+                string uniqueFileName = null;
                 if (user.ProfileImg.Length > 0)
-                { 
+                {
                     string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "img");
-                    uniqueFileName = Guid.NewGuid().ToString()+ "-" + user.ProfileImg.FileName;
+                    uniqueFileName = Guid.NewGuid().ToString() + "-" + user.ProfileImg.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         user.ProfileImg.CopyTo(fileStream);
-                    }                        
-                }                
+                    }
+                }
                 string password = user.Password.Trim();
                 user.Password = _securityService.Encrypt(password);
-                user.ProfileImage ="/img/"+ uniqueFileName;
+                user.ProfileImage = "/img/" + uniqueFileName;
 
-                    _context.Add(user);
-                    _context.SaveChanges();
-               
+                _context.Add(user);
+                _context.SaveChanges();
+
                 return View("Details", user);
             }
             catch
@@ -87,24 +87,42 @@ namespace VacationSplit.Controllers
         // GET: AcountController/Edit/5
         public ActionResult Edit(int id)
         {
-                User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
-                return View(user);
+            User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
+            return View(user);
         }
 
         // POST: AcountController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Models.User user)
+        public ActionResult Edit(Models.User updatedUser)
         {
             try
             {
-                    string password = user.Password.Trim();
-                    user.Password = _securityService.Encrypt(password);
+                
+                User user = _context.Users.FirstOrDefault(u => u.Id == updatedUser.Id);
+
+                if (user != null)
+                {
+                    user.FirstName = updatedUser.FirstName;
+                    user.LastName = updatedUser.LastName;
+                    user.Email = updatedUser.Email;
+                    string password = updatedUser.Password.Trim();
+
+                    
+                    if (password != null)
+                    {
+                        user.Password = _securityService.Encrypt(password);
+                    }
+
+                    
                     _context.Update(user);
                     _context.SaveChanges();
                     return View("Details", _context.Users.Where(p => p.Id == user.Id).FirstOrDefault());
-
-           
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             catch
             {
@@ -112,16 +130,15 @@ namespace VacationSplit.Controllers
             }
         }
 
-
         public ActionResult Delete(int id)
         {
-                User user = _context.Users.Find(id);
-                _context.Users.Remove(user);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
+            User user = _context.Users.Find(id);
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
 
         }
 
-        
+
     }
 }

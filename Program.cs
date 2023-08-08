@@ -41,7 +41,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<VacationSplitContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("VacationSplitDB")));
 builder.Services.AddScoped<ILoginService, LoginService>();
-builder.Services.AddScoped<ISecurityService, SecurityService>(); 
+builder.Services.AddScoped<ISecurityService, SecurityService>();
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(20); // Vous pouvez ajuster le délai d'inactivité selon vos besoins
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -55,6 +64,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseSession();
 
 app.UseRouting();
 

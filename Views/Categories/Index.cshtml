@@ -5,7 +5,7 @@
 
 
         .sidebar {
-            background-color: #2F4F4F;
+            background-color: #3F5F5F;
             height: 100vh;
             padding: 20px 0;
             color: #fff;
@@ -13,22 +13,30 @@
             box-shadow: 5px 0px 15px rgba(0, 0, 0, 0.2);
         }
 
+        @@media (max-width: 992px) {
+            .sidebar {
+                height: auto;
+                border-right: none;
+                border-bottom: 3px solid #fff;
+            }
+        }
+
 
         .btn-primary {
-            background-color: #2F4F4F;
+            background-color: #3F5F5F;
             border-color: whitesmoke;
         }
 
         .btn-success {
-            background-color: #CC5500;
-            border-color: #CC5500;
+            background-color: #B26900;
+            border-color: #B26900;
         }
 
         .btn-primary:hover,
         .btn-primary:focus,
         .btn-primary:active {
-            background-color: #CC5500;
-            border-color: #CC5500;
+            background-color: #B26900;
+            border-color: #B26900;
         }
 
         .icon-nav {
@@ -55,14 +63,14 @@
         }
 
         .table thead th {
-            background-color: #2F4F4F;
+            background-color: #3F5F5F;
             color: #fff;
         }
     </style>
 }
 
 <div class="row m-0">
-    <div class="col-md-3 sidebar d-flex flex-column justify-content-center">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12 sidebar d-flex flex-column justify-content-center">
         <h2 class="text-center">Catégories</h2>
         <button type="button" id="add-button" class="btn btn-success mb-3">
             <i class="fas fa-plus"></i> Ajouter
@@ -76,7 +84,7 @@
             <button type="submit" class="btn btn-primary">Enregistrer</button>
         </form>
     </div>
-    <div class="col-md-9 p-4 main-content">
+    <div class="col-lg-9 col-md-8 col-sm-6 col-12 p-4 main-content">
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>

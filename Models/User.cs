@@ -38,6 +38,6 @@ namespace VacationSplit.Models
         [DataType(DataType.ImageUrl)]
         public string ProfileImage { get; set; }
         [NotMapped]
-        public IFormFile ProfileImg { get; set; }
+        public IFormFile? ProfileImg { get; set; }
     }
 }
