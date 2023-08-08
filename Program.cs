@@ -44,6 +44,15 @@ builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ISecurityService, SecurityService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(20); // Vous pouvez ajuster le délai d'inactivité selon vos besoins
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -56,6 +65,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseSession();
 
 app.UseRouting();
 
