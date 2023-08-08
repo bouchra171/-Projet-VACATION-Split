@@ -24,12 +24,12 @@ using Microsoft.Extensions.DependencyInjection;
 //    {
 //        Name = "Restaurant"
 //    };
-//var Expense = new Expense
-//{
-//    DateExpense  = DateTime.Now,
-//    Amount = 75,
-//    Category = 
-//};
+//    //var Expense = new Expense
+//    //{
+//    //    DateExpense = DateTime.Now,
+//    //    Amount = 75,
+//    //    Category =
+//    //};
 //    context.Add(user);
 //    context.Add(Category);
 //    context.SaveChanges();
@@ -41,7 +41,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<VacationSplitContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("VacationSplitDB")));
 builder.Services.AddScoped<ILoginService, LoginService>();
-builder.Services.AddScoped<ISecurityService, SecurityService>(); 
+builder.Services.AddScoped<ISecurityService, SecurityService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 

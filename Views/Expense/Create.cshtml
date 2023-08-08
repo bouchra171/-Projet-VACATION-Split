@@ -1,0 +1,43 @@
+﻿ @model VacationSplit.Models.Expense
+@{
+    List<SelectListItem> availableCategorie = ViewBag.Categories;
+
+}
+@if (availableCategorie.Count > 0)
+{
+    <h4>Ajouter une dépense</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="DateExpense" class="control-label">Date de dépense :</label>
+                    <input asp-for="DateExpense" class="form-control" />
+                    <span asp-validation-for="DateExpense" class="text-danger"></span>
+                </div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <dib class="form-group">
+                    <label class="control-label">Catégories</label>
+                    @Html.DropDownListFor(m => m.Category.Id, availableCategorie)
+                    <span asp-validation-for="Category.Id" class="text-danger"></span>
+                </dib>
+                <div class="form-group">
+                    <label asp-for="Amount" class="control-label">Le montant : </label>
+                    <input asp-for="Amount" class="form-control" />
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+}
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
