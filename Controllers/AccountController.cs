@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using VacationSplit.Models;
 using VacationSplit.Data;
 using Microsoft.AspNetCore.Http;
@@ -169,7 +168,7 @@ namespace VacationSplit.Controllers
 {
     public class AccountController : Controller
     {
-        static List<User> _users = new List<User>();
+         List<User> _users = new List<User>();
         private readonly VacationSplitContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ISecurityService _securityService;
@@ -301,5 +300,4 @@ namespace VacationSplit.Controllers
 
 
     }
->>>>>>> origin/dev
 }
