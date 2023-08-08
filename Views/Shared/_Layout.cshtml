@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
     <title>VacationSplit</title>
 
     
@@ -32,6 +34,11 @@
     <header>
         <a href="@Url.Action("Index", "Home")" class="logo"><span>VACATION</span>Split</a>
         <div class="menuToggle" onclick="toggleMenu();"></div>
+        <span></span>
+        <span></span>
+        <span></span>
+        </div>
+
         <ul class="navbar">
             <li><a href="@Url.Action("Index", "Home")" onclick="toggleMenu();">Accueil</a></li>
             <li><a href="#apropos" onclick="toggleMenu();">À propos</a></li>
@@ -59,7 +66,7 @@
         </main>
     </div>
 
-    <footer class="footer footer-custom text-white mt-5" style="padding: 10px 0; opacity: 0.8; height: 70px;">
+    <footer class="footer footer-custom text-white mt-5" style="padding: 10px 0; opacity: 0.8; height: 70px; background: rgba(255, 140, 0, 0.8);">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6 text-center">
@@ -84,6 +91,8 @@
 
 
 
+
+
     <script type="text/javascript">
         window.addEventListener('scroll', function () {
             const header = document.querySelector('header');
@@ -101,6 +110,12 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    <script>
+        new WOW().init();
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
