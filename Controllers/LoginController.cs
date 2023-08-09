@@ -49,8 +49,9 @@ namespace VacationSplit.Controllers
                     if (userInfo != null)
                     {
                         HttpContext.Session.SetString("UserName", userInfo.FirstName); // Enregistrez le prénom de l'utilisateur dans la session
-                        HttpContext.Session.SetString("UserLastName", userInfo.LastName); // Enregistrez le nom de famille de l'utilisateur dans la session
-                    }
+                        HttpContext.Session.SetString("UserLastName", userInfo.LastName);
+                        HttpContext.Session.SetString("UserId", userInfo.Id.ToString());// Enregistrez le nom de famille de l'utilisateur dans la session
+                }
 
                     //// Authentification réussie, connecter l'utilisateur
                     //HttpContext.Session.SetString("IsLoggedIn", "true");

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 using VacationSplit.Data;
 using VacationSplit.IServices;
 using VacationSplit.Models;
@@ -15,14 +16,14 @@ namespace VacationSplit.Services
         }
         public IEnumerable<SelectListItem> GetCategories()
         {
-            List<SelectListItem> categories = (List<SelectListItem>)_context.Categories.AsNoTracking()
+            List<SelectListItem> categories = _context.Categories.AsNoTracking()
                                         .OrderBy(c => c.Name)
                                             .Select(c =>
                                             new SelectListItem
                                             {
                                                 Value = c.Id.ToString(),
                                                 Text = c.Name
-                                            });
+                                            }).ToList();
             var categorietip = new SelectListItem()
             {
                 Value = null,
@@ -34,6 +35,11 @@ namespace VacationSplit.Services
         public Task<List<Category>> FindAllAsync()
         {
             return _context.Categories.ToListAsync();
+        }
+
+        public  Category GetCategoryById(int id)
+        {
+            return _context.Categories.FirstOrDefault(x => x.Id == id);
         }
     }
 }

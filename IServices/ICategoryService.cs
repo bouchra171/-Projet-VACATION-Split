@@ -7,6 +7,7 @@ namespace VacationSplit.IServices
     {
         public Task<List<Category>> FindAllAsync();
         public IEnumerable<SelectListItem> GetCategories();
+        public Category GetCategoryById(int id);
 
     }
 }

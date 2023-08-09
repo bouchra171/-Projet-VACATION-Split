@@ -1,9 +1,12 @@
-﻿using VacationSplit.ViewsModel;
+﻿using VacationSplit.Models;
+using VacationSplit.ViewsModel;
 
 namespace VacationSplit.IServices
 {
-    public class IExpenseService
+    public interface IExpenseService
     {
-       // public ExpenseCreateViewModel CreateExepence(int userId);
+        public ExpenseCreateViewModel CreateExepense(int userId);
+        public  Task SaveExpense(ExpenseCreateViewModel model, int userId);
+        public Task<List<ExpenseListViewModel>> GetAllExpense(int userId);
     }
 }

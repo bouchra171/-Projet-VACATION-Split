@@ -9,7 +9,7 @@ body ,html{
 }
 
 .card {
-    max-width: 500px;
+    max-width: 800px;
     margin: 50px auto;
     display: flex;
     flex-direction: column;
@@ -132,60 +132,66 @@ body ,html{
         width:100%;
     }
 }
-</style
-
-
+</style>
 <div class="card">
     <div class="card-header text-center">
-        <h3> Details utilisateur</h3>
     </div>
-</div>
-<div class="card-body">
-    <div class="image-container">
-        <img src="@Model.ProfileImage" alt="Profile Image" />
-    </div>
-    <div class="form-container">
-     @if (Model != null)
-        {            
-                <form asp-action="Edit">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="Id" />
-                    <div class="form-group">
-                        <label asp-for="FirstName" class="control-label"></label>
-                        <input asp-for="FirstName" class="form-control" />
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="LastName" class="control-label"></label>
-                        <input asp-for="LastName" class="form-control" />
-                        <span asp-validation-for="LastName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Email" class="control-label"></label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Password" class="control-label"></label>
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Save" class="btn btn-primary" />
-                    </div>
-                </form>
-            
-            
-        }
-        else
-        {
-            <p>une erreur s'est produite veulliez contacter le notre service clients</p>
-        }     
-
-
-        <div class="card-footer text-center">
-            <a asp-action="Index">Back to List</a>
+    <div class="card-body">
+        <div class="image-container">
+            <img src="~/img/image_720-3.png" alt="Image Description">
         </div>
+        <form enctype="multipart/form-data" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ville" class="control-label"></label>
+                <input asp-for="Ville" class="form-control" />
+                <span asp-validation-for="Ville" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProfileImg" class="control-label"></label>
+                <input asp-for="ProfileImg" type="file" class="form-control" onchange="previewImage(event)" />
+                <img id="preview" width="200" />
+                <span asp-validation-for="ProfileImg" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sauvegarder" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>     
+        <div class="card-footer text-center">
+            <a asp-action="Index">Retour à la liste</a>
+        </div>
+        <script>
+            function previewImage(event) {
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var output = document.getElementById('preview');
+                    output.src = reader.result;
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        </script>
 
 @section Scripts {
     @{

@@ -13,6 +13,7 @@ builder.Services.AddDbContext<VacationSplitContext>(options=>options.UseSqlServe
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ISecurityService, SecurityService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IExpenseService, ExpenseService>();
 
 builder.Services.AddDistributedMemoryCache(); // Ajouter le cache en mémoire pour stocker les sessions
 
