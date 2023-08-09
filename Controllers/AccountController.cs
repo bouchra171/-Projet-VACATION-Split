@@ -58,8 +58,17 @@ namespace VacationSplit.Controllers
                 // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = false;
             }
-            User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
-                return View(user);            
+            if (id >0)
+            {
+                User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
+                return View(user);
+            }else
+            {
+                int userId = Int32.Parse(HttpContext.Session.GetString("UserId"));
+                User user = _context.Users.Where(p => p.Id == userId).FirstOrDefault();
+                return View(user);
+            }
+                           
 
         }
 
@@ -181,9 +190,7 @@ namespace VacationSplit.Controllers
                 }
                 _context.Update(user);
                 _context.SaveChanges();
-                return View("Details", _context.Users.Where(p => p.Id == user.Id).FirstOrDefault());
-
-           
+                return View("Details", _context.Users.Where(p => p.Id == user.Id).FirstOrDefault());           
             }
             catch
             {
@@ -198,7 +205,6 @@ namespace VacationSplit.Controllers
                 _context.Users.Remove(user);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
-
         }
 
         
