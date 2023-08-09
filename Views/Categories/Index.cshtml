@@ -1,42 +1,56 @@
 ﻿@model List<VacationSplit.Models.Category>
-
 @section Styles {
     <style>
-
-
         .sidebar {
-            background-color: #3F5F5F;
             height: 100vh;
             padding: 20px 0;
             color: #fff;
-            border-right: 3px solid #fff;
+            border-right: 3px solid #FF4500;
             box-shadow: 5px 0px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
 
         @@media (max-width: 992px) {
             .sidebar {
                 height: auto;
                 border-right: none;
-                border-bottom: 3px solid #fff;
+                border-bottom: 3px solid #FF4500;
             }
         }
 
+        .btn {
+            background-color: transparent;
+            border-color: transparent;
+        }
+
+            .btn i {
+                color: #FAD02E;
+            }
 
         .btn-primary {
-            background-color: #3F5F5F;
-            border-color: whitesmoke;
+            color: #2F4F4F;
+        }
+
+        .btn-danger i {
+            color: #2F4F4F;
         }
 
         .btn-success {
-            background-color: #B26900;
-            border-color: #B26900;
+            background-color: #2F4F4F;
+            border-color: #FAD02E;
+            color: #2F4F4F;
         }
 
         .btn-primary:hover,
         .btn-primary:focus,
         .btn-primary:active {
-            background-color: #B26900;
-            border-color: #B26900;
+            background-color: rgba(178, 105, 0, 0.5);
+            border-color: whitesmoke;
+        }
+
+        .btn-success, .btn-primary {
+            background-color: transparent;
+            border-color: whitesmoke;
         }
 
         .icon-nav {
@@ -49,7 +63,7 @@
         }
 
         .main-content {
-            background-color: #f4f4f4;
+            background-color: #F4F4F4;
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
@@ -63,14 +77,39 @@
         }
 
         .table thead th {
-            background-color: #3F5F5F;
+            background-color: #D28000;
             color: #fff;
+        }
+
+        .sidebar video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        .sidebar h2 {
+            z-index: 1;
+            position: relative;
+            font-size: 2em;
+            color: #2F4F4F;
+        }
+
+        .sidebar button {
+            z-index: 1;
+            position: relative;
         }
     </style>
 }
-
 <div class="row m-0">
     <div class="col-lg-3 col-md-4 col-sm-6 col-12 sidebar d-flex flex-column justify-content-center">
+        <video autoplay muted loop id="myVideo">
+            <source src="https://video-public.canva.com/VAExzepgX0g/v/e20f342da4.mp4" type="video/mp4">
+        </video>
         <h2 class="text-center">Catégories</h2>
         <button type="button" id="add-button" class="btn btn-success mb-3">
             <i class="fas fa-plus"></i> Ajouter
@@ -123,9 +162,7 @@
         </div>
     </div>
 </div>
-
 @section Scripts {
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('add-button').addEventListener('click', function (e) {
@@ -133,7 +170,6 @@
                 document.getElementById('add-name').value = "";
                 document.getElementById('add-form').classList.toggle('d-none');
             });
-
             let editButtons = document.getElementsByClassName('edit-button');
             Array.from(editButtons).forEach(function (button) {
                 button.addEventListener('click', function (e) {
@@ -143,7 +179,6 @@
                     toggleElements(row);
                 });
             });
-
             let saveButtons = document.getElementsByClassName('save-button');
             Array.from(saveButtons).forEach(function (button) {
                 button.addEventListener('click', function (e) {
@@ -151,7 +186,6 @@
                     let id = this.getAttribute('data-id');
                     let row = this.closest('tr');
                     let newName = row.querySelector('.edit-name').value;
-
                     fetch('/Categories/Edit', {
                         method: 'POST',
                         headers: {
@@ -173,7 +207,6 @@
                         });
                 });
             });
-
             function toggleElements(row) {
                 Array.from(row.querySelectorAll('.display-name, .edit-name, .edit-button, .save-button')).forEach(function (el) {
                     el.style.display = (el.style.display === 'none') ? '' : 'none';
@@ -182,6 +215,3 @@
         });
     </script>
 }
-
-
-
