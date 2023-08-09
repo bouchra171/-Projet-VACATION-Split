@@ -119,18 +119,11 @@
 
 <div class="card">
     <div class="card-header text-center">
-        <h3>User Details</h3>
+        <h3>Détails utilisateur</h3>
     </div>
     <div class="card-body">
-        <div class="image-container">
-            @if (!string.IsNullOrEmpty(Model.ProfileImage))
-            {
-                <img src="@Url.Content(Model.ProfileImage)" alt="Profile Image" />
-            }
-            else
-            {
-                <p>No profile image available.</p>
-            }
+        <div class="image-container">           
+                <img src="@Model.ProfileImage" alt="Profile Image" />          
         </div>
         <div class="form-container">
             @if (Model != null)
@@ -154,15 +147,15 @@
             }
             else
             {
-                <p>User not found.</p>
+                <p>Utilisateur non trouvé.</p>
             }
         </div>
     </div>
     <div class="card-footer text-center">
         @if (Model != null)
         {
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Modifier</a>
         }
-        <a asp-action="Index" class="btn btn-primary">Back to List</a>
+        <a asp-action="Index" class="btn btn-primary">Retour à la liste</a>
     </div>
 </div>

@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using VacationSplit.Models;
 using VacationSplit.Data;
-using Microsoft.AspNetCore.Http;
-using System.IO;
 using VacationSplit.IServices;
 
 namespace VacationSplit.Controllers
@@ -30,16 +28,18 @@ namespace VacationSplit.Controllers
                 // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = true;
                 ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
+                _users = _context.Users.ToList();
+
+                return View(_users);
             }
             else
             {
                 // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = false;
+                return View();
             }
 
-            _users = _context.Users.ToList();
-
-                return View(_users);
+            
             
 
         }
@@ -94,7 +94,7 @@ namespace VacationSplit.Controllers
                     return View();
                 }
                 string uniqueFileName = null;                
-                if (user.ProfileImg.Length > 0)
+                if (user.ProfileImg != null)
                 { 
                     string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "img");
                     uniqueFileName = Guid.NewGuid().ToString()+ "-" + user.ProfileImg.FileName;
@@ -102,11 +102,17 @@ namespace VacationSplit.Controllers
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         user.ProfileImg.CopyTo(fileStream);
-                    }                        
-                }                
+                    }
+                    user.ProfileImage = "/img/" + uniqueFileName;
+                }
+                else
+                {
+                    user.ProfileImage = "/img/avatar.jpg";
+                }
+                
                 string password = user.Password.Trim();
                 user.Password = _securityService.Encrypt(password);
-                user.ProfileImage ="/img/"+ uniqueFileName;
+                //user.ProfileImage ="/img/"+ uniqueFileName;
 
                     _context.Add(user);
                     _context.SaveChanges();
@@ -128,6 +134,7 @@ namespace VacationSplit.Controllers
         // GET: AcountController/Edit/5
         public ActionResult Edit(int id)
         {
+
             if (HttpContext.Session.GetString("IsLoggedIn") == "true")
             {
                 // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
@@ -138,23 +145,43 @@ namespace VacationSplit.Controllers
             {
                 // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = false;
-            }
-            User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
+            }            
+
+                User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
+                if (user == null)
+                {
+                    user.Password = _securityService.Decrypt(user.Password);
+                }
+
                 return View(user);
         }
 
         // POST: AcountController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Models.User user)
+        public ActionResult Edit(Models.User user, IFormFile file)
         {
             try
-            {
-                    string password = user.Password.Trim();
-                    user.Password = _securityService.Encrypt(password);
-                    _context.Update(user);
-                    _context.SaveChanges();
-                    return View("Details", _context.Users.Where(p => p.Id == user.Id).FirstOrDefault());
+            {               
+                string uniqueFileName = null;
+                if (user.ProfileImg != null)
+                {
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "img");
+                    uniqueFileName = Guid.NewGuid().ToString() + "-" + user.ProfileImg.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        user.ProfileImg.CopyTo(fileStream);
+                    }
+                    user.ProfileImage = "/img/" + uniqueFileName;
+                }
+                else
+                {
+                    user.ProfileImage = "/img/avatar.jpg";
+                }
+                _context.Update(user);
+                _context.SaveChanges();
+                return View("Details", _context.Users.Where(p => p.Id == user.Id).FirstOrDefault());
 
            
             }
