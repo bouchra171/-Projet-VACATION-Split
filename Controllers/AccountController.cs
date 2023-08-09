@@ -46,8 +46,19 @@ namespace VacationSplit.Controllers
 
         // GET: AcountController/Details/5
         public ActionResult Details(int id)
-        {           
-                User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
+        {
+            if (HttpContext.Session.GetString("IsLoggedIn") == "true")
+            {
+                // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = true;
+                ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
+            }
+            else
+            {
+                // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = false;
+            }
+            User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
                 return View(user);            
 
         }
@@ -67,10 +78,7 @@ namespace VacationSplit.Controllers
                 ViewBag.IsLoggedIn = false;
             }
 
-            //// Définir la valeur de ViewBag.IsLoggedIn en fonction de l'état de connexion de l'utilisateur
-            //ViewBag.IsLoggedIn = HttpContext.Session.GetString("IsLoggedIn") == "true";
-
-                return View();
+            return View();
             }
 
         // POST: AcountController/Create
@@ -108,7 +116,8 @@ namespace VacationSplit.Controllers
                 HttpContext.Session.SetString("IsLoggedIn", "true"); // Marquez l'utilisateur comme connecté
 
 
-                return View("Details", user);
+               // return View("Details", user);
+                return RedirectToAction("Details", new { id = user.Id }); // Rediriger vers la page de détails
             }
             catch
             {
@@ -119,7 +128,18 @@ namespace VacationSplit.Controllers
         // GET: AcountController/Edit/5
         public ActionResult Edit(int id)
         {
-                User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
+            if (HttpContext.Session.GetString("IsLoggedIn") == "true")
+            {
+                // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = true;
+                ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
+            }
+            else
+            {
+                // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = false;
+            }
+            User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
                 return View(user);
         }
 
