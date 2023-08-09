@@ -34,9 +34,11 @@ namespace VacationSplit.Models
         [StringLength(20)]
         [DataType(DataType.Text)]
         public string Ville { get; set; }
-        [DisplayName("Phot de profil")]
+        [DisplayName("Photo de profil")]
         [DataType(DataType.ImageUrl)]
         public string ProfileImage { get; set; }
+        [DisplayName("Photo de profil")]
+        [DataType(DataType.ImageUrl)]
         [NotMapped]
         public IFormFile? ProfileImg { get; set; }
     }

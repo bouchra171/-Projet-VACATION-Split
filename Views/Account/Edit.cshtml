@@ -2,16 +2,146 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<style>
+body ,html{
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;  
+}
 
-<h1>Edit</h1>
+.card {
+    max-width: 800px;
+    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.1);
+    background-color: #fff;
+    overflow: hidden;
+}
 
-<h4>User</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+.card-header {
+    background: #595959;
+    border-radius: 10px 10px 0 0;
+    color: #FFF;
+    padding: 10px;
+    font-size:1.5em;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 20px;
+    flex-grow:1;
+}
+
+.image-container {
+    flex: 1 0 10%;
+    border-right: 1px solid #ddd;
+    display: flex;
+    align-items:centre;
+    justify-content:center;
+    border-right: 1px solid #ddd;
+    overflow: hidden;
+    margin-right: 20px;
+}
+
+.form-container {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 20px;
+    border: 2px solid #ddd; 
+    border-radius: 5px; 
+    margin-left: 20px
+}
+
+.form-group:last-of-type {
+    margin-bottom: 50px; 
+}
+
+.control-label {
+    font-weight: bold;
+    font-size:1.1em;
+    display:block;
+    margin-bottom:10px;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.form-control, .btn {
+    border-radius: 5px;
+    padding:10px;
+    font-size:1.1em;
+    background: rgba(255, 255, 255, 0.5);
+    background: #fff;
+    transition: box-shadow .3s, background .3s;
+    border: 1px solid #ddd;
+     font-family: 'Montserrat', sans-serif;
+     color: rgba(0, 0, 0, 0.7);
+}
+
+.form-control:focus, .btn:focus {
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.1);
+    background: transparent;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.btn-primary {
+    background: #ff8c00;
+    border : none;
+    color: #FFF;
+    padding: 10px 20px;
+    transition:all 0.5s;
+}
+
+.btn-primary:hover {
+    background: #e87928;
+    opacity: 0.9;
+}
+
+.text-primary {
+    color: #2F4F4F !important;
+}
+
+.text-danger {
+    color: red;
+    font-weight:bold;
+}
+
+.image-container img {
+    height:100%;
+    object-fit:cover;
+}
+
+@@media only screen and (max-width: 800px) {
+    .card-body {
+        flex-direction: column;
+    }
+
+    .image-container, .form-container {
+        height: auto;
+        flex: none;
+    }
+
+    .image-container img {
+        height: auto; 
+        width:100%;
+    }
+}
+</style>
+<div class="card">
+    <div class="card-header text-center">
+    </div>
+    <div class="card-body">
+        <div class="image-container">
+            <img src="~/img/image_720-3.png" alt="Image Description">
+        </div>
+        <form enctype="multipart/form-data" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
@@ -21,6 +151,11 @@
                 <label asp-for="LastName" class="control-label"></label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ville" class="control-label"></label>
+                <input asp-for="Ville" class="form-control" />
+                <span asp-validation-for="Ville" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
@@ -33,15 +168,30 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label asp-for="ProfileImg" class="control-label"></label>
+                <input asp-for="ProfileImg" type="file" class="form-control" onchange="previewImage(event)" />
+                <img id="preview" width="200" />
+                <span asp-validation-for="ProfileImg" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sauvegarder" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+</div>     
+        <div class="card-footer text-center">
+            <a asp-action="Index">Retour à la liste</a>
+        </div>
+        <script>
+            function previewImage(event) {
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var output = document.getElementById('preview');
+                    output.src = reader.result;
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        </script>
 
 @section Scripts {
     @{

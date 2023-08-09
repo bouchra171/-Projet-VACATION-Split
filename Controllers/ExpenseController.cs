@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using VacationSplit.Data;
 using VacationSplit.IServices;
 using VacationSplit.Models;
+using VacationSplit.ViewsModel;
 
 namespace VacationSplit.Controllers
 {
@@ -12,18 +13,20 @@ namespace VacationSplit.Controllers
         List<Expense> _expenseList;
         private readonly VacationSplitContext _context;
         private readonly ICategoryService _categoryservice;
+        private readonly IExpenseService _expenseservice;
 
-        public ExpenseController(VacationSplitContext context, ICategoryService categoryservice)
+        public ExpenseController(VacationSplitContext context, IExpenseService expenseservice)
         {
             _context = context;
-            _categoryservice = categoryservice;
+            _expenseservice = expenseservice;
         }
 
 
         // GET: ExpenseController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            _expenseList = _context.Expenses.ToList();
+            int userId = Int32.Parse(HttpContext.Session.GetString("UserId"));
+            List<ExpenseListViewModel> _expenseList = await _expenseservice.GetAllExpense(userId);            
             return View(_expenseList);
         }
 
@@ -36,32 +39,28 @@ namespace VacationSplit.Controllers
         // GET: ExpenseController/Create
         public async Task<ActionResult> Create()
         {
-            List<Category> categories = await _categoryservice.FindAllAsync();
-            ViewBag.Categories = categories
-               .Select(c => new SelectListItem
-               {
-                   Value = c.Id.ToString(),
-                   Text = c.Name
-               })
-               .ToList();
-            return View();
+            int userId = Int32.Parse(HttpContext.Session.GetString("UserId"));
+            var expense = _expenseservice.CreateExepense(userId);           
+            
+            return View(expense);
         }
 
         // POST: ExpenseController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(ExpenseCreateViewModel model)
         {
-            try
-            {
-               //collection
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+               if(model != null)
+                {
+                    int userId = Int32.Parse(HttpContext.Session.GetString("UserId"));
+                    await _expenseservice.SaveExpense(model, userId);
+                    return RedirectToAction("Index", "expense");                    
+                }
+                else
+                {
+                    return View();
+                }               
+           
         }
 
         // GET: ExpenseController/Edit/5
@@ -86,24 +85,22 @@ namespace VacationSplit.Controllers
         }
 
         // GET: ExpenseController/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            return View();
+            Expense expense = _context.Expenses.Find(id);
+            if (expense == null)
+            {
+                return NotFound();
+            }
+            _context.Expenses.Remove(expense);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         // POST: ExpenseController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
+        
     }
 }
