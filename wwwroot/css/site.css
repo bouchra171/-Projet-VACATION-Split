@@ -74,6 +74,12 @@ header {
             font-family: 'Playfair Display', sans-serif;
         }
 
+#split-text span
+{
+    color: #2F4F4F;
+}
+
+
     .navbar {
         display: flex;
         position: relative;
@@ -111,9 +117,10 @@ header .navbar li a:hover {
     background-position: center;
 }
 
-
-
-
+.banner-text {   
+    font-size: 24px;   
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);  /* Ajoute une ombre portée légère */ 
+}
 
         .banniere .contenu {
             max-width: 100%;

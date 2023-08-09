@@ -31,25 +31,24 @@
 
 <body>
     <header>
-        <a href="@Url.Action("Index", "Home")" class="logo"><span>VACATION</span>Split</a>
+        <a href="@Url.Action("Index", "Home")" class="logo"><span>VACATION</span><span id="split-text">Split</span></a>
         <div class="menuToggle" onclick="toggleMenu();"></div>
         <span></span>
         <span></span>
         <span></span>
-        </div>
 
         <ul class="navbar">
             <li><a href="@Url.Action("Index", "Home")" onclick="toggleMenu();">Accueil</a></li>
-            <li><a href="#apropos" onclick="toggleMenu();">À propos</a></li>
+            <li><a href="@Url.Action("Index", "Home")#apropos" onclick="toggleMenu();">À propos</a></li>
 
             @if (ViewBag.IsLoggedIn != null && (bool)ViewBag.IsLoggedIn)
             {
                 <li><a href="@Url.Action("Index", "Categories")" onclick="toggleMenu();">Catégories</a></li>
                 <li><a href="@Url.Action("Index", "Expense")" onclick="toggleMenu();">Dépenses</a></li>
-                <li><a href="@Url.Action("Logout", "Login")" onclick="toggleMenu();">Déconnexion</a></li>
-                <li><a href ="@Url.Action("Index", "Account")" class="float-right" onclick="toggleMenu();">Bonjour, @ViewBag.UserName !</a>
-
+                <li><a href="@Url.Action("Logout", "Login")" onclick="toggleMenu();">Déconnexion</a></li>                
+                <li><a href="@Url.Action("Details", "Account")" class="float-right" onclick="toggleMenu();">Bonjour, @ViewBag.UserName !</a></li>             
                 </li>
+
             }
             else
             {

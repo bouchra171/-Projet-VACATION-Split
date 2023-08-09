@@ -25,8 +25,25 @@ namespace VacationSplit.Controllers
         // GET: ExpenseController
         public async Task<ActionResult> Index()
         {
+
+            if (HttpContext.Session.GetString("IsLoggedIn") == "true")
+            {
+                // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = true;
+                ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
+            }
+            else
+            {
+                // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
+                ViewBag.IsLoggedIn = false;
+            }
+
+
+            _expenseList = _context.Expenses.ToList();
+
             int userId = Int32.Parse(HttpContext.Session.GetString("UserId"));
             List<ExpenseListViewModel> _expenseList = await _expenseservice.GetAllExpense(userId);            
+
             return View(_expenseList);
         }
 
