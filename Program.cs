@@ -9,13 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<VacationSplitContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("VacationSplitDB")));
+builder.Services.AddDbContext<VacationSplitContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("VacationSplitDB")));
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ISecurityService, SecurityService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 
-builder.Services.AddDistributedMemoryCache(); // Ajouter le cache en mémoire pour stocker les sessions
+builder.Services.AddDistributedMemoryCache(); 
 
 builder.Services.AddSession(options =>
 {
@@ -24,8 +24,6 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
-builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -44,12 +42,13 @@ app.UseSession();
 
 app.UseRouting();
 
-app.UseSession();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    name: "expense",
+    pattern: "{controller=Expense}/{action=Index}/{id?}"); 
 
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}"); 
 app.Run();

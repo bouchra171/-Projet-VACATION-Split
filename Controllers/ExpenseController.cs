@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using VacationSplit.Data;
@@ -23,6 +24,7 @@ namespace VacationSplit.Controllers
 
 
         // GET: ExpenseController
+        // GET: ExpenseController
         public async Task<ActionResult> Index()
         {
             if (HttpContext.Session.GetString("IsLoggedIn") == "true")
@@ -30,23 +32,26 @@ namespace VacationSplit.Controllers
                 // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = true;
                 ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
+                if (HttpContext.Session.TryGetValue("UserId", out var userIdBytes) &&
+                    int.TryParse(Encoding.UTF8.GetString(userIdBytes), out int userId))
+                {
+                    List<ExpenseListViewModel> _expenseList = await _expenseservice.GetAllExpense(userId);
+                    return View(_expenseList);
+                }
+                else
+                {
+                    
+                    return RedirectToAction("Login", "Account"); 
+                }
             }
             else
             {
                 // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = false;
+                return View();
             }
-            int userId = Int32.Parse(HttpContext.Session.GetString("UserId"));
-            List<ExpenseListViewModel> _expenseList = await _expenseservice.GetAllExpense(userId);            
-
-            return View(_expenseList);
         }
 
-        // GET: ExpenseController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
         // GET: ExpenseController/Create
         public async Task<ActionResult> Create()
@@ -73,18 +78,25 @@ namespace VacationSplit.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(ExpenseCreateViewModel model)
         {
-               if(model != null)
+            if (model != null)
+            {
+                if (int.TryParse(HttpContext.Session.GetString("UserId"), out int userId))
                 {
-                    int userId = Int32.Parse(HttpContext.Session.GetString("UserId"));
                     await _expenseservice.SaveExpense(model, userId);
-                    return RedirectToAction("Index", "expense");                    
+                    return RedirectToAction("Index", "Expense"); 
                 }
                 else
                 {
-                    return View();
-                }               
-           
+                    
+                    return RedirectToAction("Login", "Account"); 
+                }
+            }
+            else
+            {
+                return View();
+            }
         }
+
 
         // GET: ExpenseController/Edit/5
         public ActionResult Edit(int id)

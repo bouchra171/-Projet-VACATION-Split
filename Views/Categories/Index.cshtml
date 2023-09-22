@@ -1,4 +1,5 @@
 ﻿@model List<VacationSplit.Models.Category>
+
 @section Styles {
     <style>
         .sidebar {
@@ -103,6 +104,27 @@
             z-index: 1;
             position: relative;
         }
+
+        label {
+            color: #2F4F4F; 
+        }
+
+        #add-name, .edit-name {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        #add-button {
+            margin-left: 10px; 
+            margin-right: 10px; 
+            border: 3px solid #2F4F4F; 
+        }
+
+        .border-category-color {
+            border: 3px solid #2F4F4F;
+            padding: 15px;
+            border-radius: 5px;
+        }
     </style>
 }
 <div class="row m-0">
@@ -114,7 +136,8 @@
         <button type="button" id="add-button" class="btn btn-success mb-3">
             <i class="fas fa-plus"></i> Ajouter
         </button>
-        <form asp-action="Create" id="add-form" class="d-none">
+        <form asp-action="Create" id="add-form" class="d-none border-category-color">
+
             @Html.AntiForgeryToken()
             <div class="form-group">
                 <label for="add-name">Nom :</label>

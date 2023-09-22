@@ -53,15 +53,7 @@ namespace VacationSplit.Controllers
                         HttpContext.Session.SetString("UserId", userInfo.Id.ToString());// Enregistrez le nom de famille de l'utilisateur dans la session
                 }
 
-                    //// Authentification réussie, connecter l'utilisateur
-                    //HttpContext.Session.SetString("IsLoggedIn", "true");
-
-                    //User u = _securityService.FindUserByEmail(user.Email);
-
-                    //if (!string.IsNullOrEmpty(user.FirstName))
-                    //{
-                    //    HttpContext.Session.SetString("UserName", user.FirstName); // Enregistrez le nom de l'utilisateur dans la session
-                    //}
+                
 
                     return RedirectToAction("Index", "Home");
 

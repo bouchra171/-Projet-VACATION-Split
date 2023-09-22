@@ -2,212 +2,206 @@ using Microsoft.AspNetCore.Mvc;
 using VacationSplit.Models;
 using VacationSplit.Data;
 using VacationSplit.IServices;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using System;
 
 namespace VacationSplit.Controllers
 {
     public class AccountController : Controller
     {
-        static List<User> _users = new List<User>();
         private readonly VacationSplitContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ISecurityService _securityService;
-
 
         public AccountController(IWebHostEnvironment webHostEnvironment, VacationSplitContext context, ISecurityService securityService)
         {
             _webHostEnvironment = webHostEnvironment;
             _context = context;
             _securityService = securityService;
-
         }
-        // GET: AcountController
-        public ActionResult Index()
+
+        public IActionResult Index()
         {
             if (HttpContext.Session.GetString("IsLoggedIn") == "true")
             {
-                // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = true;
-                ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
-                _users = _context.Users.ToList();
-
-                return View(_users);
+                ViewBag.UserName = HttpContext.Session.GetString("UserName");
+                var users = _context.Users.ToList();
+                return View(users);
             }
             else
             {
-                // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = false;
                 return View();
             }
-
-            
-            
-
         }
 
-        // GET: AcountController/Details/5
-        public ActionResult Details(int id)
+        public IActionResult Details(int id)
         {
             if (HttpContext.Session.GetString("IsLoggedIn") == "true")
             {
-                // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = true;
-                ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
+                ViewBag.UserName = HttpContext.Session.GetString("UserName");
             }
             else
             {
-                // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = false;
             }
-            if (id >0)
-            {
-                User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
-                return View(user);
-            }else
-            {
-                int userId = Int32.Parse(HttpContext.Session.GetString("UserId"));
-                User user = _context.Users.Where(p => p.Id == userId).FirstOrDefault();
-                return View(user);
-            }
-                           
 
+            int userId = id > 0 ? id : int.Parse(HttpContext.Session.GetString("UserId"));
+            User user = _context.Users.Find(userId);
+
+            if (user == null)
+            {
+                // Gérer l'utilisateur non trouvé ici
+                return NotFound();
+            }
+
+            return View(user);
         }
 
-        // GET: AcountController/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             if (HttpContext.Session.GetString("IsLoggedIn") == "true")
             {
-                // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = true;
-                ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
+                ViewBag.UserName = HttpContext.Session.GetString("UserName");
             }
             else
             {
-                // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = false;
             }
 
             return View();
-            }
+        }
 
-        // POST: AcountController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Models.User user, IFormFile file)
+        public IActionResult Create(User user, IFormFile file)
         {
             try
             {
-                
                 if (_securityService.IsValidEmail(user.Email))
                 {
+                    // Gérer l'email non valide ici
                     return View();
                 }
-                string uniqueFileName = null;                
-                if (user.ProfileImg != null)
-                { 
+
+                string uniqueFileName = null;
+
+                if (file != null)
+                {
                     string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "img");
-                    uniqueFileName = Guid.NewGuid().ToString()+ "-" + user.ProfileImg.FileName;
+                    uniqueFileName = Guid.NewGuid().ToString() + "-" + file.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
-                        user.ProfileImg.CopyTo(fileStream);
+                        file.CopyTo(fileStream);
                     }
+
                     user.ProfileImage = "/img/" + uniqueFileName;
                 }
                 else
                 {
                     user.ProfileImage = "/img/avatar.jpg";
                 }
-                
+
                 string password = user.Password.Trim();
                 user.Password = _securityService.Encrypt(password);
-                //user.ProfileImage ="/img/"+ uniqueFileName;
 
-                    _context.Add(user);
-                    _context.SaveChanges();
+                _context.Add(user);
+                _context.SaveChanges();
 
-                // Connecter l'utilisateur après la création du compte
-                HttpContext.Session.SetString("UserName", user.FirstName); // Enregistrez le nom de l'utilisateur dans la session
-                HttpContext.Session.SetString("IsLoggedIn", "true"); // Marquez l'utilisateur comme connecté
+                HttpContext.Session.SetString("UserName", user.FirstName);
+                HttpContext.Session.SetString("IsLoggedIn", "true");
 
-
-               // return View("Details", user);
-                return RedirectToAction("Details", new { id = user.Id }); // Rediriger vers la page de détails
+                return RedirectToAction("Details", new { id = user.Id });
             }
             catch
             {
+                // Gérer l'erreur ici
                 return View();
             }
         }
 
-        // GET: AcountController/Edit/5
-        public ActionResult Edit(int id)
+        public IActionResult Edit(int id)
         {
-
             if (HttpContext.Session.GetString("IsLoggedIn") == "true")
             {
-                // L'utilisateur est connecté, afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = true;
-                ViewBag.UserName = HttpContext.Session.GetString("UserName"); // Récupérer le nom de l'utilisateur connecté
+                ViewBag.UserName = HttpContext.Session.GetString("UserName");
             }
             else
             {
-                // L'utilisateur n'est pas connecté, ne pas afficher les onglets "Catégories" et "Dépenses"
                 ViewBag.IsLoggedIn = false;
-            }            
+            }
 
-                User user = _context.Users.Where(p => p.Id == id).FirstOrDefault();
-                if (user == null)
-                {
-                    user.Password = _securityService.Decrypt(user.Password);
-                }
+            User user = _context.Users.Find(id);
 
-                return View(user);
+            if (user == null)
+            {
+                // Gérer l'utilisateur non trouvé ici
+                return NotFound();
+            }
+
+            return View(user);
         }
 
-        // POST: AcountController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Models.User user, IFormFile file)
+        public IActionResult Edit(User user, IFormFile file)
         {
             try
-            {               
+            {
                 string uniqueFileName = null;
-                if (user.ProfileImg != null)
+
+                if (file != null)
                 {
                     string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "img");
-                    uniqueFileName = Guid.NewGuid().ToString() + "-" + user.ProfileImg.FileName;
+                    uniqueFileName = Guid.NewGuid().ToString() + "-" + file.FileName;
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
-                        user.ProfileImg.CopyTo(fileStream);
+                        file.CopyTo(fileStream);
                     }
+
                     user.ProfileImage = "/img/" + uniqueFileName;
                 }
                 else
                 {
                     user.ProfileImage = "/img/avatar.jpg";
                 }
+
                 _context.Update(user);
                 _context.SaveChanges();
-                return View("Details", _context.Users.Where(p => p.Id == user.Id).FirstOrDefault());           
+
+                return RedirectToAction("Details", new { id = user.Id });
             }
             catch
             {
+                // Gérer l'erreur ici
                 return View();
             }
         }
 
-
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
-                User user = _context.Users.Find(id);
-                _context.Users.Remove(user);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
+            User user = _context.Users.Find(id);
+
+            if (user == null)
+            {
+                // Gérer l'utilisateur non trouvé ici
+                return NotFound();
+            }
+
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
-
-        
     }
-
 }
