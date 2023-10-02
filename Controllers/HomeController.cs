@@ -13,6 +13,13 @@ namespace VacationSplit.Controllers
             _logger = logger;
         }
 
+
+        [Route("/")]
+        public IActionResult RedirectToHome()
+        {
+            return RedirectToAction("Index");
+        }
+
         public IActionResult Index()
         {
 
